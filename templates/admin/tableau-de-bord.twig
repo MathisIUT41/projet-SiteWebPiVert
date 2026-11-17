@@ -1,0 +1,95 @@
+{% extends 'admin/layout.twig' %}
+{% import 'partials/icones.twig' as i %}
+
+{% block titre %}Tableau de bord · Admin PiVert{% endblock %}
+
+{% block contenu %}
+<section class="page-entete">
+    <h1 class="page-titre">Tableau de bord</h1>
+    <p class="page-intro">Bonjour {{ client.prenom }}, voici l'état du stock.</p>
+</section>
+
+<ul class="stats" aria-label="Chiffres du stock">
+    <li class="stat"><span class="stat-valeur">{{ stats.total }}</span><span class="stat-libelle">produits au catalogue</span></li>
+    <li class="stat stat--vegetal"><span class="stat-valeur">{{ stats.par_univers.vegetal }}</span><span class="stat-libelle">Univers Végétal</span></li>
+    <li class="stat stat--animalier"><span class="stat-valeur">{{ stats.par_univers.animalier }}</span><span class="stat-libelle">Univers Animalier</span></li>
+    <li class="stat"><span class="stat-valeur">{{ stats.stock_faible }}</span><span class="stat-libelle">en stock faible (5 ou moins)</span></li>
+    <li class="stat{{ stats.rupture > 0 ? ' stat--alerte' }}"><span class="stat-valeur">{{ stats.rupture }}</span><span class="stat-libelle">en rupture</span></li>
+</ul>
+
+<section class="admin-section" id="produits" aria-labelledby="produits-titre">
+    <div class="admin-section-tete">
+        <h2 class="section-titre" id="produits-titre">Produits</h2>
+        <div class="admin-outils">
+            <div class="recherche">
+                <label class="visuellement-cache" for="admin-recherche">Rechercher un produit</label>
+                <input id="admin-recherche" type="search" placeholder="Rechercher…" autocomplete="off">
+                {{ i.icone('recherche') }}
+            </div>
+            <div class="champ admin-filtre">
+                <label class="visuellement-cache" for="admin-categorie">Catégorie</label>
+                <select id="admin-categorie">
+                    <option value="">Toutes les catégories</option>
+                    {% for c in categories %}
+                        <option value="{{ c.slug }}">{{ c.libelle }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <a class="bouton bouton--sombre" href="produit.php">{{ i.icone('plus') }}Nouveau produit</a>
+        </div>
+    </div>
+
+    <div class="tableau-conteneur">
+        <table class="tableau">
+            <thead>
+                <tr>
+                    <th scope="col"><span class="visuellement-cache">Photo</span></th>
+                    <th scope="col">Produit</th>
+                    <th scope="col">Catégorie</th>
+                    <th scope="col">Animal</th>
+                    <th scope="col">Marque</th>
+                    <th scope="col" class="nombre">Prix</th>
+                    <th scope="col" class="nombre">Stock</th>
+                    <th scope="col"><span class="visuellement-cache">Actions</span></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for p in produits %}
+                    <tr data-recherche="{{ p.nom }} {{ p.libelle_categorie }} {{ p.libelle_espece }} {{ p.nom_marque }}" data-categorie="{{ p.slug_categorie }}">
+                        <td><img class="tableau-photo" src="{{ base_url }}{{ image_produit(p.photo_nom) }}" alt="" width="48" height="48" loading="lazy"></td>
+                        <th scope="row" class="tableau-nom">{{ p.nom }}</th>
+                        <td><span class="etiquette etiquette--{{ p.univers }}">{{ p.libelle_categorie }}</span></td>
+                        <td>{{ p.libelle_espece ?? '—' }}</td>
+                        <td>{{ p.nom_marque ?? '—' }}</td>
+                        <td class="nombre">{{ p.prix|prix }}</td>
+                        <td class="nombre">
+                            {% if p.quantite == 0 %}
+                                <span class="stock stock--rupture">{{ i.icone('alerte') }}Rupture</span>
+                            {% elseif p.quantite <= 5 %}
+                                <span class="stock stock--faible">Faible ({{ p.quantite }})</span>
+                            {% else %}
+                                <span class="stock">{{ p.quantite }}</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <div class="tableau-actions">
+                            <a class="bouton-icone" href="produit.php?id={{ p.id_produit }}" aria-label="Modifier {{ p.nom }}">{{ i.icone('crayon') }}</a>
+                            <form method="post" action="produit-supprimer.php" data-confirmer="Supprimer « {{ p.nom }} » ?">
+                                <input type="hidden" name="csrf" value="{{ csrf }}">
+                                <input type="hidden" name="id" value="{{ p.id_produit }}">
+                                <button class="bouton-icone bouton-icone--danger" type="submit" aria-label="Supprimer {{ p.nom }}">{{ i.icone('poubelle') }}</button>
+                            </form>
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <p class="aucun-resultat" id="admin-aucun" hidden>Aucun produit ne correspond.</p>
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+    <script type="module" src="{{ base_url }}assets/js/admin-tableau.js"></script>
+{% endblock %}

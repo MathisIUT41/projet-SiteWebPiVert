@@ -150,3 +150,54 @@ function produits_mis_en_avant(int $n = 4): array
 
     return $resultat;
 }
+
+/**
+ * Chiffres du tableau de bord en une requête.
+ * Stock faible = 1 à 5 exemplaires ; rupture = 0.
+ */
+function stats_stock(): array
+{
+    $l = db_un(
+        "SELECT COUNT(*) AS total,
+                SUM(c.univers = 'vegetal') AS vegetal,
+                SUM(c.univers = 'animalier') AS animalier,
+                SUM(p.quantite BETWEEN 1 AND 5) AS stock_faible,
+                SUM(p.quantite = 0) AS rupture
+         FROM PRODUIT p JOIN CATEGORIE c ON c.id_categorie = p.id_categorie"
+    );
+
+    return [
+        'total' => (int) $l['total'],
+        'par_univers' => ['vegetal' => (int) $l['vegetal'], 'animalier' => (int) $l['animalier']],
+        'stock_faible' => (int) $l['stock_faible'],
+        'rupture' => (int) $l['rupture'],
+    ];
+}
+
+/** Tous les produits pour le tableau de l'admin, avec marque. */
+function produits_admin(): array
+{
+    $lignes = db_tous(
+        'SELECT p.id_produit, p.nom, p.description, p.prix, p.quantite, p.photo_nom, p.espece, p.date_ajout,
+                c.id_categorie, c.slug AS slug_categorie, c.libelle AS libelle_categorie, c.univers,
+                m.nom_marque
+         FROM PRODUIT p
+         JOIN CATEGORIE c ON c.id_categorie = p.id_categorie
+         LEFT JOIN MARQUE m ON m.id_marque = p.id_marque
+         ORDER BY p.nom'
+    );
+
+    return array_map('completer_produit', $lignes);
+}
+
+/** Catégories (pour les listes déroulantes de l'admin). */
+function categories(): array
+{
+    return db_tous('SELECT id_categorie, slug, libelle, univers FROM CATEGORIE ORDER BY id_categorie');
+}
+
+/** Marques (pour le formulaire produit). */
+function marques(): array
+{
+    return db_tous('SELECT id_marque, nom_marque FROM MARQUE ORDER BY nom_marque');
+}

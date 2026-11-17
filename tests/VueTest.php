@@ -50,4 +50,17 @@ final class VueTest extends BaseTestCase
         $this->assertStringContainsString("id=\"modale-produit\"", $html);
         $this->assertStringContainsString("modale-produit.js", $html);
     }
+    public function test_bandeau_demo(): void
+    {
+        $_SESSION["client"] = ["prenom" => "Recruteur", "role" => "demo"];
+        $html = rendu_chaine("admin/tableau-de-bord.twig", ["stats" => ["total" => 0, "par_univers" => ["vegetal" => 0, "animalier" => 0], "stock_faible" => 0, "rupture" => 0], "produits" => [], "categories" => [], "base_url" => "../"]);
+        $this->assertStringContainsString("Mode démo — lecture seule", $html);
+    }
+
+    public function test_pas_de_bandeau_pour_admin(): void
+    {
+        $_SESSION["client"] = ["prenom" => "Mathis", "role" => "admin"];
+        $html = rendu_chaine("admin/tableau-de-bord.twig", ["stats" => ["total" => 0, "par_univers" => ["vegetal" => 0, "animalier" => 0], "stock_faible" => 0, "rupture" => 0], "produits" => [], "categories" => [], "base_url" => "../"]);
+        $this->assertStringNotContainsString("Mode démo — lecture seule", $html);
+    }
 }

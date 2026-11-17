@@ -1,0 +1,52 @@
+{% extends 'base.twig' %}
+{% import 'partials/icones.twig' as i %}
+
+{% block titre %}Administration · PiVert{% endblock %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{{ base_url }}assets/css/admin.css">
+{% endblock %}
+
+{% block entete %}
+<header class="entete">
+    <nav class="nav" aria-label="Administration">
+        <a class="nav-logo" href="index.php"><span class="nav-logo-pi">Pi</span>Vert <span class="admin-badge">Admin</span></a>
+
+        <ul class="nav-liens" id="nav-liens">
+            <li><a class="nav-lien{{ page_admin == 'tableau' ? ' est-actif' }}" href="index.php"{% if page_admin == 'tableau' %} aria-current="page"{% endif %}>Tableau de bord</a></li>
+            <li><a class="nav-lien{{ page_admin == 'produit' ? ' est-actif' }}" href="produit.php"{% if page_admin == 'produit' %} aria-current="page"{% endif %}>Nouveau produit</a></li>
+            <li><a class="nav-lien{{ page_admin == 'commande' ? ' est-actif' }}" href="commande.php"{% if page_admin == 'commande' %} aria-current="page"{% endif %}>Nouvelle commande</a></li>
+            <li><a class="nav-lien" href="{{ base_url }}index.php">Retour au site</a></li>
+            <li class="nav-deconnexion-mobile">
+                <form method="post" action="{{ base_url }}deconnexion.php">
+                    <input type="hidden" name="csrf" value="{{ csrf }}">
+                    <button class="nav-lien" type="submit">Se déconnecter</button>
+                </form>
+            </li>
+        </ul>
+
+        <div class="nav-actions">
+            <span class="nav-prenom">{{ i.icone('compte') }}<span>{{ client.prenom }}</span></span>
+            <form class="nav-deconnexion" method="post" action="{{ base_url }}deconnexion.php">
+                <input type="hidden" name="csrf" value="{{ csrf }}">
+                <button type="submit">Se déconnecter</button>
+            </form>
+            <button class="nav-menu-bouton" type="button" aria-expanded="false" aria-controls="nav-liens">
+                {{ i.icone('menu') }}<span class="visuellement-cache">Menu</span>
+            </button>
+        </div>
+    </nav>
+
+    {% if client.role == 'demo' %}
+        <p class="bandeau-demo" role="note">{{ i.icone('alerte') }}<span><strong>Mode démo — lecture seule.</strong> Tu peux tout parcourir ; les modifications sont bloquées.</span></p>
+    {% endif %}
+</header>
+{% endblock %}
+
+{% block classe_main %}page admin{% endblock %}
+
+{% block pied %}
+    <footer class="admin-pied">
+        <p>PiVert faunes &amp; flores — espace d'administration</p>
+    </footer>
+{% endblock %}

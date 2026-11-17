@@ -60,3 +60,9 @@ function rendu(string $template, array $vars = []): void
 {
     echo rendu_chaine($template, $vars);
 }
+
+/** Rendu d'une page de /admin (chemins relatifs au dossier parent). */
+function rendu_admin(string $template, array $vars = []): void
+{
+    rendu($template, $vars + ['base_url' => '../']);
+}

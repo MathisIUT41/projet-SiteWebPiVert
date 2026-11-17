@@ -106,3 +106,39 @@ function peut_modifier_admin(?array $client): bool
 {
     return ($client['role'] ?? null) === 'admin';
 }
+
+/** Seul le rôle admin peut modifier (le rôle demo voit l'admin en lecture seule). */
+function ecriture_admin_autorisee(?array $client): bool
+{
+    return peut_modifier_admin($client);
+}
+
+/**
+ * Où envoyer quelqu'un qui n'a pas accès à /admin : la connexion s'il est anonyme,
+ * l'accueil s'il est déjà connecté (sinon compte.php le renverrait ici, en boucle).
+ */
+function destination_refus_admin(?array $client): string
+{
+    return $client === null ? '../compte.php?retour=admin/index.php' : '../index.php';
+}
+
+/** Garde d'accès à /admin : renvoie le client, sinon redirige. */
+function exiger_admin(): array
+{
+    $client = client_connecte();
+    if (!peut_voir_admin($client)) {
+        flash('erreur', 'Accès réservé à l\'administration.');
+        rediriger(destination_refus_admin($client));
+    }
+
+    return $client;
+}
+
+/** Garde d'écriture : à appeler en premier dans toute branche POST de /admin. */
+function exiger_ecriture_admin(): void
+{
+    if (!ecriture_admin_autorisee(client_connecte())) {
+        flash('erreur', 'Mode démo : les modifications sont désactivées');
+        rediriger(referer_relatif('index.php'));
+    }
+}
