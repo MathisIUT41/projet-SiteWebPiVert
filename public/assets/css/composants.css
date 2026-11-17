@@ -475,3 +475,48 @@
     85% { opacity: 1; transform: translateY(0); }
     100% { opacity: 0; transform: translateY(12px); visibility: hidden; }
 }
+
+/* ---------- Formulaires et onglets ---------- */
+.formulaire {
+    display: grid;
+    gap: 16px;
+}
+
+.formulaire-ligne {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+@media (max-width: 520px) {
+    .formulaire-ligne {
+        grid-template-columns: 1fr;
+    }
+}
+
+.bouton--large {
+    width: 100%;
+    min-height: 50px;
+}
+
+.onglets {
+    display: flex;
+    gap: 4px;
+    padding: 4px;
+    border-radius: var(--rayon-pilule);
+    background: var(--fond);
+    width: max-content;
+    max-width: 100%;
+}
+
+.onglet {
+    padding: 8px 18px;
+    border-radius: var(--rayon-pilule);
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.onglet.est-actif {
+    background: var(--vert);
+    color: var(--fond);
+}

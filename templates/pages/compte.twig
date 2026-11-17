@@ -1,0 +1,102 @@
+{% extends 'base.twig' %}
+{% import 'partials/icones.twig' as i %}
+
+{% block titre %}{{ onglet == 'inscription' ? 'Créer un compte' : 'Connexion' }} · PiVert{% endblock %}
+
+{% block contenu %}
+<div class="compte">
+    <section class="compte-carte" aria-labelledby="compte-titre">
+        <h1 id="compte-titre" class="compte-titre">{{ onglet == 'inscription' ? 'Crée ton compte' : 'Content de te revoir' }}</h1>
+        <p class="compte-intro">
+            {{ onglet == 'inscription'
+                ? 'Un compte te permet de valider tes commandes et de retrouver ton adresse de livraison.'
+                : 'Connecte-toi pour valider ta commande.' }}
+        </p>
+
+        <nav class="onglets" aria-label="Connexion ou inscription">
+            <a class="onglet{{ onglet == 'connexion' ? ' est-actif' }}" href="compte.php?retour={{ retour|url_encode }}"{% if onglet == 'connexion' %} aria-current="page"{% endif %}>Connexion</a>
+            <a class="onglet{{ onglet == 'inscription' ? ' est-actif' }}" href="compte.php?onglet=inscription&amp;retour={{ retour|url_encode }}"{% if onglet == 'inscription' %} aria-current="page"{% endif %}>Inscription</a>
+        </nav>
+
+        {% if onglet == 'connexion' %}
+            <form class="formulaire" method="post" action="compte.php" novalidate>
+                <input type="hidden" name="csrf" value="{{ csrf }}">
+                <input type="hidden" name="action" value="connexion">
+                <input type="hidden" name="retour" value="{{ retour }}">
+
+                {% if erreur_connexion %}
+                    <p class="message-erreur" role="alert">{{ erreur_connexion }}</p>
+                {% endif %}
+
+                <div class="champ">
+                    <label for="connexion-email">Adresse e-mail</label>
+                    <input id="connexion-email" type="email" name="email" autocomplete="email" required value="{{ saisie.email ?? '' }}">
+                </div>
+                <div class="champ">
+                    <label for="connexion-mdp">Mot de passe</label>
+                    <input id="connexion-mdp" type="password" name="mot_de_passe" autocomplete="current-password" required>
+                </div>
+                <button class="bouton bouton--sombre bouton--large" type="submit">Se connecter</button>
+            </form>
+        {% else %}
+            <form class="formulaire" method="post" action="compte.php?onglet=inscription" novalidate>
+                <input type="hidden" name="csrf" value="{{ csrf }}">
+                <input type="hidden" name="action" value="inscription">
+                <input type="hidden" name="retour" value="{{ retour }}">
+
+                <div class="formulaire-ligne">
+                    {% for champ, libelle in {prenom: 'Prénom', nom: 'Nom'} %}
+                        <div class="champ{{ erreurs[champ] is defined ? ' a-erreur' }}">
+                            <label for="inscription-{{ champ }}">{{ libelle }}</label>
+                            <input id="inscription-{{ champ }}" type="text" name="{{ champ }}" autocomplete="{{ champ == 'prenom' ? 'given-name' : 'family-name' }}" required value="{{ saisie[champ] ?? '' }}"{% if erreurs[champ] is defined %} aria-invalid="true" aria-describedby="erreur-{{ champ }}"{% endif %}>
+                            {% if erreurs[champ] is defined %}<p class="champ-erreur" id="erreur-{{ champ }}">{{ erreurs[champ] }}</p>{% endif %}
+                        </div>
+                    {% endfor %}
+                </div>
+
+                <div class="champ{{ erreurs.email is defined ? ' a-erreur' }}">
+                    <label for="inscription-email">Adresse e-mail</label>
+                    <input id="inscription-email" type="email" name="email" autocomplete="email" required value="{{ saisie.email ?? '' }}"{% if erreurs.email is defined %} aria-invalid="true" aria-describedby="erreur-email"{% endif %}>
+                    {% if erreurs.email is defined %}<p class="champ-erreur" id="erreur-email">{{ erreurs.email }}</p>{% endif %}
+                </div>
+
+                <div class="champ{{ erreurs.mot_de_passe is defined ? ' a-erreur' }}">
+                    <label for="inscription-mdp">Mot de passe</label>
+                    <input id="inscription-mdp" type="password" name="mot_de_passe" autocomplete="new-password" minlength="8" required aria-describedby="{{ erreurs.mot_de_passe is defined ? 'erreur-mdp' : 'aide-mdp' }}"{% if erreurs.mot_de_passe is defined %} aria-invalid="true"{% endif %}>
+                    {% if erreurs.mot_de_passe is defined %}
+                        <p class="champ-erreur" id="erreur-mdp">{{ erreurs.mot_de_passe }}</p>
+                    {% else %}
+                        <p class="champ-aide" id="aide-mdp">8 caractères minimum.</p>
+                    {% endif %}
+                </div>
+
+                <div class="champ{{ erreurs.adresse is defined ? ' a-erreur' }}">
+                    <label for="inscription-adresse">Adresse de livraison</label>
+                    <input id="inscription-adresse" type="text" name="adresse" autocomplete="street-address" required value="{{ saisie.adresse ?? '' }}"{% if erreurs.adresse is defined %} aria-invalid="true" aria-describedby="erreur-adresse"{% endif %}>
+                    {% if erreurs.adresse is defined %}<p class="champ-erreur" id="erreur-adresse">{{ erreurs.adresse }}</p>{% endif %}
+                </div>
+
+                <button class="bouton bouton--sombre bouton--large" type="submit">Créer mon compte</button>
+            </form>
+        {% endif %}
+    </section>
+
+    <aside class="compte-demo sur-sombre" aria-labelledby="demo-titre">
+        <h2 id="demo-titre">Tu recrutes ?</h2>
+        <p>Visite l'espace d'administration en mode démo : tu vois tout (stock, fiches produit, commandes), mais rien n'est modifiable.</p>
+        <dl class="compte-demo-ids">
+            <div><dt>E-mail</dt><dd>recruteur@pivert.demo</dd></div>
+            <div><dt>Mot de passe</dt><dd>recruteur2027</dd></div>
+        </dl>
+        <form method="post" action="compte.php">
+            <input type="hidden" name="csrf" value="{{ csrf }}">
+            <input type="hidden" name="action" value="connexion">
+            <input type="hidden" name="retour" value="admin/index.php">
+            <input type="hidden" name="email" value="recruteur@pivert.demo">
+            <input type="hidden" name="mot_de_passe" value="recruteur2027">
+            <button class="bouton bouton--vegetal" type="submit">Visiter l'admin en mode démo</button>
+        </form>
+        <p class="compte-demo-client">Pour tester une commande : <strong>client@pivert.demo</strong> / <strong>demo1234</strong></p>
+    </aside>
+</div>
+{% endblock %}
