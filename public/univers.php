@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 require dirname(__DIR__) . '/src/bootstrap.php';
 
-$univers = (string) ($_GET['u'] ?? '');
+$univers = en_texte($_GET['u'] ?? '');
 if (!isset(UNIVERS[$univers])) {
     rediriger('index.php');
 }
 
-$filtre = filtre_valide($univers, isset($_GET['filtre']) ? (string) $_GET['filtre'] : null);
+$filtre = filtre_valide($univers, isset($_GET['filtre']) ? en_texte($_GET['filtre']) : null);
 
 rendu('pages/univers.twig', [
     'univers' => $univers,

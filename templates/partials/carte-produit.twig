@@ -14,7 +14,7 @@
         <p class="carte-produit-prix">{{ p.prix|prix }}</p>
     </div>
     <div class="carte-produit-pied">
-        <span class="carte-produit-categorie">{{ p.libelle_espece ?: p.libelle_categorie }}</span>
+        <span class="carte-produit-categorie">{{ p.libelle_categorie }}</span>
         {% if p.quantite > 0 %}
             <form method="post" action="{{ base_url }}panier-action.php">
                 <input type="hidden" name="csrf" value="{{ csrf }}">

@@ -7,11 +7,8 @@ require dirname(__DIR__) . '/src/bootstrap.php';
 $client = client_connecte();
 $commande = commande_par_id((int) ($_GET['id'] ?? 0));
 
-// Seul le client de la commande (ou l'administration) peut la voir.
-if ($client === null
-    || $commande === null
-    || ((int) $commande['commande']['id_client'] !== (int) $client['id_client'] && !peut_voir_admin($client))
-) {
+// Seul le client de la commande (ou l'administrateur) peut la voir.
+if ($commande === null || !peut_voir_commande($commande, $client)) {
     rediriger('index.php');
 }
 

@@ -67,13 +67,13 @@ if (est_post()) {
 
     // Formulaire ré-affiché avec ce qui a été saisi.
     $saisie = [
-        'nom' => (string) ($_POST['nom'] ?? ''),
-        'description' => (string) ($_POST['description'] ?? ''),
-        'prix' => (string) ($_POST['prix'] ?? ''),
-        'quantite' => (string) ($_POST['quantite'] ?? ''),
-        'id_categorie' => (string) ($_POST['id_categorie'] ?? ''),
-        'id_marque' => (string) ($_POST['id_marque'] ?? ''),
-        'espece' => (string) ($_POST['espece'] ?? ''),
+        'nom' => en_texte($_POST['nom'] ?? ''),
+        'description' => en_texte($_POST['description'] ?? ''),
+        'prix' => en_texte($_POST['prix'] ?? ''),
+        'quantite' => en_texte($_POST['quantite'] ?? ''),
+        'id_categorie' => en_texte($_POST['id_categorie'] ?? ''),
+        'id_marque' => en_texte($_POST['id_marque'] ?? ''),
+        'espece' => en_texte($_POST['espece'] ?? ''),
         'caracteristiques' => $donnees['caracteristiques'],
     ];
 }

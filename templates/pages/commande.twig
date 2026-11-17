@@ -48,6 +48,9 @@
         </dl>
         <form method="post" action="commande.php">
             <input type="hidden" name="csrf" value="{{ csrf }}">
+            {% for l in lignes %}
+                <input type="hidden" name="attendu[{{ l.id_produit }}]" value="{{ l.quantite }}">
+            {% endfor %}
             <button class="bouton bouton--sombre bouton--large" type="submit">Confirmer la commande</button>
         </form>
         <a class="bouton bouton--contour bouton--large" href="panier.php">Modifier mon panier</a>

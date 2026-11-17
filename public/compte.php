@@ -23,13 +23,13 @@ if (est_post()) {
     $action = $_POST['action'] ?? '';
 
     if ($action === 'connexion') {
-        $client = connecter((string) ($_POST['email'] ?? ''), (string) ($_POST['mot_de_passe'] ?? ''));
+        $client = connecter(en_texte($_POST['email'] ?? ''), en_texte($_POST['mot_de_passe'] ?? ''));
         if ($client !== null) {
             flash('succes', "Bienvenue, {$client['prenom']} !");
             rediriger($retour);
         }
         $erreurConnexion = 'E-mail ou mot de passe incorrect.';
-        $saisie = ['email' => trim((string) ($_POST['email'] ?? ''))];
+        $saisie = ['email' => trim(en_texte($_POST['email'] ?? ''))];
     }
 
     if ($action === 'inscription') {

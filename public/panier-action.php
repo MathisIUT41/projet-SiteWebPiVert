@@ -10,7 +10,7 @@ if (!est_post()) {
 
 exiger_csrf();
 
-$action = (string) ($_POST['action'] ?? '');
+$action = en_texte($_POST['action'] ?? '');
 $id = entier_post('id');
 $qte = entier_post('qte', 0);
 $retour = url_retour_sure($_POST['retour'] ?? null, 'panier.php');

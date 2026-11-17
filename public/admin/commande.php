@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 require dirname(__DIR__, 2) . '/src/bootstrap.php';
 
-exiger_admin();
+$lecteur = exiger_admin();
 
 // Récapitulatif d'une commande enregistrée.
 if (isset($_GET['id'])) {
@@ -13,11 +13,12 @@ if (isset($_GET['id'])) {
         flash('erreur', 'Cette commande n\'existe pas.');
         rediriger('commande.php');
     }
+    $commande['client'] = client_affichable($commande['client'], $lecteur);
     rendu_admin('admin/commande-recap.twig', ['page_admin' => 'commande', 'c' => $commande]);
     exit;
 }
 
-$clients = clients_pour_commande();
+$clients = clients_pour_commande($lecteur);
 $erreur = null;
 $saisie = ['id_client' => 0, 'quantites' => []];
 

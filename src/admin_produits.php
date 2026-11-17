@@ -13,13 +13,13 @@ const PHOTO_TYPES = ['image/jpeg' => 'jpg', 'image/png' => 'png', 'image/webp' =
 function valider_produit(array $post): array
 {
     $erreurs = [];
-    $nom = trim((string) ($post['nom'] ?? ''));
-    $description = trim((string) ($post['description'] ?? ''));
-    $prixSaisi = str_replace([' ', "\u{202F}", ','], ['', '', '.'], trim((string) ($post['prix'] ?? '')));
+    $nom = trim(en_texte($post['nom'] ?? ''));
+    $description = trim(en_texte($post['description'] ?? ''));
+    $prixSaisi = str_replace([' ', "\u{202F}", ','], ['', '', '.'], trim(en_texte($post['prix'] ?? '')));
     $quantite = filter_var($post['quantite'] ?? null, FILTER_VALIDATE_INT);
     $idCategorie = filter_var($post['id_categorie'] ?? null, FILTER_VALIDATE_INT);
-    $idMarque = trim((string) ($post['id_marque'] ?? ''));
-    $espece = trim((string) ($post['espece'] ?? ''));
+    $idMarque = trim(en_texte($post['id_marque'] ?? ''));
+    $espece = trim(en_texte($post['espece'] ?? ''));
 
     if ($nom === '' || mb_strlen($nom) > 255) {
         $erreurs['nom'] = 'Le nom est obligatoire (255 caractères maximum).';
@@ -56,10 +56,14 @@ function valider_produit(array $post): array
     }
 
     $caracteristiques = [];
-    foreach ((array) ($post['caracteristiques'] ?? []) as $ligne) {
-        $libelle = trim((string) ($ligne['libelle'] ?? ''));
-        $valeur = trim((string) ($ligne['valeur'] ?? ''));
-        $icone = trim((string) ($ligne['icone'] ?? ''));
+    $lignes = is_array($post['caracteristiques'] ?? null) ? $post['caracteristiques'] : [];
+    foreach ($lignes as $ligne) {
+        if (!is_array($ligne)) {
+            continue;
+        }
+        $libelle = trim(en_texte($ligne['libelle'] ?? ''));
+        $valeur = trim(en_texte($ligne['valeur'] ?? ''));
+        $icone = trim(en_texte($ligne['icone'] ?? ''));
         if ($libelle === '' && $valeur === '') {
             continue;
         }

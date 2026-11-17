@@ -1,0 +1,13 @@
+{% extends 'base.twig' %}
+
+{% block titre %}Erreur · PiVert{% endblock %}
+
+{% block contenu %}
+<div class="panier-vide">
+    <h1 class="page-titre">Une erreur est survenue</h1>
+    <p>La page n'a pas pu s'afficher. Réessaie dans un instant ; si le problème continue, écris-nous à contact@pivert.fr.</p>
+    <div class="bento-boutons">
+        <a class="bouton bouton--sombre" href="{{ base_url }}index.php">Retour à l'accueil</a>
+    </div>
+</div>
+{% endblock %}

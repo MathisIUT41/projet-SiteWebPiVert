@@ -9,25 +9,27 @@ declare(strict_types=1);
 function valider_inscription(array $post): array
 {
     $d = [];
-    foreach (['nom', 'prenom', 'email', 'mot_de_passe', 'adresse'] as $champ) {
-        $d[$champ] = trim((string) ($post[$champ] ?? ''));
+    foreach (['nom', 'prenom', 'email', 'adresse'] as $champ) {
+        $d[$champ] = trim(en_texte($post[$champ] ?? ''));
     }
+    // Le mot de passe est gardé tel quel : la connexion ne le modifie pas non plus.
+    $d['mot_de_passe'] = en_texte($post['mot_de_passe'] ?? '');
 
     $erreurs = [];
-    if ($d['nom'] === '') {
-        $erreurs['nom'] = 'Indique ton nom.';
+    if ($d['nom'] === '' || mb_strlen($d['nom']) > 255) {
+        $erreurs['nom'] = 'Indique ton nom (255 caractères maximum).';
     }
-    if ($d['prenom'] === '') {
-        $erreurs['prenom'] = 'Indique ton prénom.';
+    if ($d['prenom'] === '' || mb_strlen($d['prenom']) > 255) {
+        $erreurs['prenom'] = 'Indique ton prénom (255 caractères maximum).';
     }
-    if (filter_var($d['email'], FILTER_VALIDATE_EMAIL) === false) {
+    if (mb_strlen($d['email']) > 255 || filter_var($d['email'], FILTER_VALIDATE_EMAIL) === false) {
         $erreurs['email'] = 'Cette adresse e-mail n\'est pas valide.';
     }
-    if (mb_strlen($d['mot_de_passe']) < 8) {
-        $erreurs['mot_de_passe'] = 'Le mot de passe doit faire au moins 8 caractères.';
+    if (mb_strlen($d['mot_de_passe']) < 8 || strlen($d['mot_de_passe']) > 72) {
+        $erreurs['mot_de_passe'] = 'Le mot de passe doit faire entre 8 et 72 caractères.';
     }
-    if ($d['adresse'] === '') {
-        $erreurs['adresse'] = 'Indique ton adresse de livraison.';
+    if ($d['adresse'] === '' || mb_strlen($d['adresse']) > 255) {
+        $erreurs['adresse'] = 'Indique ton adresse de livraison (255 caractères maximum).';
     }
 
     return ['donnees' => $d, 'erreurs' => $erreurs];
@@ -143,8 +145,46 @@ function exiger_ecriture_admin(): void
     }
 }
 
-/** Comptes clients pour lesquels l'admin peut passer une commande. */
-function clients_pour_commande(): array
+/**
+ * Comptes clients pour lesquels l'admin peut passer une commande.
+ * Le compte démo (public) ne voit que les comptes de démonstration.
+ */
+function clients_pour_commande(?array $lecteur = null): array
 {
-    return db_tous("SELECT id_client, prenom, nom, email FROM CLIENT WHERE role = 'client' ORDER BY nom, prenom");
+    $sql = "SELECT id_client, prenom, nom, email FROM CLIENT WHERE role = 'client'";
+    if (($lecteur['role'] ?? null) === 'demo') {
+        $sql .= " AND email LIKE '%@pivert.demo'";
+    }
+
+    return db_tous($sql . ' ORDER BY nom, prenom');
+}
+
+/** Vrai pour les comptes de démonstration (données fictives, publiables). */
+function est_compte_de_demo(array $client): bool
+{
+    return str_ends_with((string) ($client['email'] ?? ''), '@pivert.demo');
+}
+
+/**
+ * Données d'un client telles qu'on peut les montrer à ce lecteur :
+ * le compte démo ne voit jamais les coordonnées des vrais clients.
+ */
+function client_affichable(array $client, ?array $lecteur): array
+{
+    if (($lecteur['role'] ?? null) !== 'demo' || est_compte_de_demo($client)) {
+        return $client;
+    }
+
+    return ['nom' => '', 'email' => 'Masqué en mode démo', 'adresse' => 'Masquée en mode démo'] + $client;
+}
+
+/** Seuls le client de la commande et l'administrateur peuvent la voir. */
+function peut_voir_commande(array $commande, ?array $lecteur): bool
+{
+    if ($lecteur === null) {
+        return false;
+    }
+
+    return ($lecteur['role'] ?? null) === 'admin'
+        || (int) ($commande['commande']['id_client'] ?? 0) === (int) ($lecteur['id_client'] ?? -1);
 }

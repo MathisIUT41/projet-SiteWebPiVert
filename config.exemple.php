@@ -1,6 +1,8 @@
 <?php
 // Copier ce fichier en config.php (non versionné) et adapter les identifiants.
 return [
+    // true en local pour voir les erreurs PHP ; false en ligne.
+    'debug' => false,
     'db' => [
         'host'         => 'localhost',
         'utilisateur'  => 'root',

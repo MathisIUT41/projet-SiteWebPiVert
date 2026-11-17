@@ -26,9 +26,9 @@ function entier_post(string $cle, int $defaut = 0): int
  * Adresse de retour après une action : uniquement un chemin relatif au site
  * (pas de schéma, pas de « // », pas d'antislash) pour éviter les redirections ouvertes.
  */
-function url_retour_sure(?string $url, string $defaut = 'index.php'): string
+function url_retour_sure(mixed $url, string $defaut = 'index.php'): string
 {
-    $url = trim((string) $url);
+    $url = trim(en_texte($url));
 
     if ($url === ''
         || str_contains($url, '\\')
@@ -59,4 +59,10 @@ function referer_relatif(string $defaut = 'index.php'): string
     $requete = (string) parse_url($referer, PHP_URL_QUERY);
 
     return url_retour_sure($chemin === '' ? '' : $chemin . ($requete === '' ? '' : '?' . $requete), $defaut);
+}
+
+/** Valeur saisie convertie en texte ; un tableau ou un objet (saisie trafiquée) devient une chaîne vide. */
+function en_texte(mixed $valeur): string
+{
+    return is_scalar($valeur) ? (string) $valeur : '';
 }

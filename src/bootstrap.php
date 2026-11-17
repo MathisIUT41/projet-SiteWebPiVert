@@ -17,3 +17,9 @@ foreach (glob(__DIR__ . '/*.php') as $fichier) {
         require_once $fichier;
     }
 }
+
+if (PHP_SAPI !== 'cli') {
+    // En ligne : jamais de détail technique à l'écran, une page d'erreur propre à la place.
+    ini_set('display_errors', !empty(config()['debug']) ? '1' : '0');
+    set_exception_handler('gerer_exception');
+}

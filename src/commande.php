@@ -99,3 +99,22 @@ function commande_par_id(int $idCommande): ?array
 
     return ['commande' => $commande, 'lignes' => $lignes, 'client' => $client];
 }
+
+/**
+ * Ce que le client a vu sur le récapitulatif ($attendu) n'est commandé que s'il correspond
+ * encore exactement à son panier ; sinon null (le panier a changé entre-temps).
+ */
+function commande_a_passer(array $attendu, array $panier): ?array
+{
+    if ($attendu === []) {
+        return null;
+    }
+
+    foreach ($attendu as $id => $qte) {
+        if ((int) ($panier[$id] ?? 0) !== (int) $qte) {
+            return null;
+        }
+    }
+
+    return $attendu;
+}

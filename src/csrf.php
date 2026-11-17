@@ -12,7 +12,7 @@ function csrf_jeton(): string
     return $_SESSION['csrf'];
 }
 
-function csrf_valide(?string $jeton): bool
+function csrf_valide(mixed $jeton): bool
 {
     return is_string($jeton) && !empty($_SESSION['csrf']) && hash_equals($_SESSION['csrf'], $jeton);
 }
