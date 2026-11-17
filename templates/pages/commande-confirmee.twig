@@ -1,0 +1,30 @@
+{% extends 'base.twig' %}
+
+{% block titre %}Commande n° {{ c.commande.id_commande }} · PiVert{% endblock %}
+
+{% block contenu %}
+<section class="confirmation sur-sombre" aria-labelledby="merci-titre">
+    <h1 class="confirmation-titre" id="merci-titre">Merci, <span class="texte-citron">{{ c.client.prenom }}</span> !</h1>
+    <p class="confirmation-texte">Ta commande n° {{ c.commande.id_commande }} est validée. On la prépare pour {{ c.client.adresse }}.</p>
+</section>
+
+<section class="commande-bloc confirmation-recap" aria-labelledby="recap-titre">
+    <h2 class="commande-bloc-titre" id="recap-titre">Récapitulatif</h2>
+    <ul class="commande-lignes">
+        {% for l in c.lignes %}
+            <li class="commande-ligne theme-{{ l.univers }}">
+                <img src="{{ image_produit(l.photo_nom) }}" alt="" width="56" height="56">
+                <span class="commande-ligne-nom">{{ l.nom }}</span>
+                <span class="commande-ligne-qte">× {{ l.quantite }}</span>
+                <strong>{{ (l.quantite * l.prix_unitaire)|prix }}</strong>
+            </li>
+        {% endfor %}
+    </ul>
+    <p class="confirmation-total"><span>Total</span><strong>{{ c.commande.total|prix }}</strong></p>
+</section>
+
+<div class="bento-boutons confirmation-boutons">
+    <a class="bouton bouton--sombre" href="index.php">Retour à l'accueil</a>
+    <a class="bouton bouton--contour" href="conseils.php">Lire nos conseils</a>
+</div>
+{% endblock %}

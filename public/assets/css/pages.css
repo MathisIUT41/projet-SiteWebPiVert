@@ -696,3 +696,116 @@ a.bento-tuile:hover img {
 .panier-vide .bento-boutons {
     justify-content: center;
 }
+
+/* ---------- Commande ---------- */
+.commande-colonne {
+    display: grid;
+    gap: 12px;
+}
+
+.commande-bloc {
+    display: grid;
+    gap: 14px;
+    padding: clamp(20px, 3vw, 28px);
+    border-radius: var(--rayon-grand);
+    background: var(--blanc);
+}
+
+.commande-bloc-titre {
+    font-size: 1.4rem;
+}
+
+.commande-lignes {
+    display: grid;
+}
+
+.commande-ligne {
+    display: grid;
+    grid-template-columns: 56px minmax(0, 1fr) auto auto;
+    align-items: center;
+    gap: 14px;
+    padding: 10px 0;
+    border-top: 1px solid var(--trait);
+}
+
+.commande-ligne:first-child {
+    border-top: 0;
+}
+
+.commande-ligne img {
+    width: 56px;
+    height: 56px;
+    border-radius: 14px;
+    object-fit: cover;
+    background: var(--fond);
+    box-shadow: 0 0 0 3px var(--accent);
+}
+
+.commande-ligne-nom {
+    font-weight: 600;
+}
+
+.commande-ligne-qte {
+    color: var(--texte-doux);
+}
+
+.commande-adresse {
+    line-height: 1.6;
+}
+
+.message-erreur .icone {
+    display: inline-block;
+    vertical-align: -0.2em;
+}
+
+.confirmation {
+    display: grid;
+    gap: 14px;
+    margin-top: 20px;
+    padding: clamp(28px, 5vw, 52px);
+    border-radius: var(--rayon-grand);
+    background: var(--vert);
+    color: var(--fond);
+}
+
+.confirmation-titre {
+    font-size: clamp(2.6rem, 8vw, 4.6rem);
+    letter-spacing: -0.045em;
+}
+
+.confirmation-texte {
+    max-width: 52ch;
+    font-size: 1.15rem;
+    opacity: 0.9;
+}
+
+.confirmation-recap {
+    margin-top: 12px;
+}
+
+.confirmation-total {
+    display: flex;
+    justify-content: space-between;
+    padding-top: 12px;
+    border-top: 1px solid var(--trait);
+    font-size: 1.3rem;
+}
+
+.confirmation-boutons {
+    margin-top: 16px;
+}
+
+@media (max-width: 520px) {
+    .commande-ligne {
+        grid-template-columns: 48px minmax(0, 1fr) auto;
+    }
+
+    .commande-ligne img {
+        width: 48px;
+        height: 48px;
+    }
+
+    .commande-ligne-qte {
+        display: none;
+    }
+}

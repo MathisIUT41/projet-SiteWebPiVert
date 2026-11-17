@@ -19,6 +19,12 @@ abstract class BaseTestCase extends TestCase
         db()->select_db($c['base']);
     }
 
+    /** Id du compte client de démonstration. */
+    protected function idClientDemo(): int
+    {
+        return (int) db_un("SELECT id_client FROM CLIENT WHERE email = 'client@pivert.demo'")['id_client'];
+    }
+
     protected function setUp(): void
     {
         $_SESSION = [];
