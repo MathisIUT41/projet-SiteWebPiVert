@@ -1,0 +1,52 @@
+{% extends 'admin/layout.twig' %}
+
+{% block titre %}Nouvelle commande · Admin PiVert{% endblock %}
+
+{% block contenu %}
+<section class="page-entete">
+    <h1 class="page-titre">Nouvelle commande</h1>
+    <p class="page-intro">Pour une commande passée par téléphone ou en boutique : choisis le client et les quantités. Le stock est mis à jour.</p>
+</section>
+
+{% if erreur %}
+    <p class="message-erreur" role="alert">{{ erreur }}</p>
+{% endif %}
+
+<form class="commande-admin" method="post" action="commande.php" novalidate>
+    <input type="hidden" name="csrf" value="{{ csrf }}">
+
+    <section class="commande-bloc">
+        <div class="champ commande-admin-client">
+            <label for="id_client">Client</label>
+            <select id="id_client" name="id_client" required>
+                <option value="">Choisir un client…</option>
+                {% for cl in clients %}
+                    <option value="{{ cl.id_client }}"{% if saisie.id_client == cl.id_client %} selected{% endif %}>{{ cl.prenom }} {{ cl.nom }} ({{ cl.email }})</option>
+                {% endfor %}
+            </select>
+        </div>
+    </section>
+
+    {% for slug, g in groupes %}
+        <fieldset class="commande-bloc commande-admin-groupe theme-{{ g.univers }}">
+            <legend class="visuellement-cache">{{ g.libelle }}</legend>
+            <h2 class="commande-bloc-titre"><span class="etiquette">{{ g.libelle }}</span></h2>
+            <ul class="commande-admin-produits">
+                {% for p in g.produits %}
+                    <li>
+                        <label for="qte-{{ p.id_produit }}">{{ p.nom }}</label>
+                        <span class="commande-admin-prix">{{ p.prix|prix }}</span>
+                        <span class="commande-admin-stock">{{ p.quantite }} en stock</span>
+                        <input id="qte-{{ p.id_produit }}" type="number" name="quantites[{{ p.id_produit }}]" min="0" max="{{ p.quantite }}" step="1" inputmode="numeric" value="{{ saisie.quantites[p.id_produit] ?? 0 }}">
+                    </li>
+                {% endfor %}
+            </ul>
+        </fieldset>
+    {% endfor %}
+
+    <div class="produit-form-actions">
+        <a class="bouton bouton--contour" href="index.php">Annuler</a>
+        <button class="bouton bouton--sombre" type="submit">Enregistrer la commande</button>
+    </div>
+</form>
+{% endblock %}

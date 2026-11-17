@@ -42,4 +42,14 @@ final class AdminTest extends BaseTestCase
         $this->assertSame("../compte.php?retour=admin/index.php", destination_refus_admin(null));
         $this->assertSame("../index.php", destination_refus_admin(["role" => "client"]));
     }
+    public function test_panier_depuis_formulaire(): void
+    {
+        $this->assertSame([3 => 2, 9 => 1], panier_depuis_formulaire(["3" => "2", "5" => "0", "7" => "-1", "9" => "1", "x" => "4", "11" => "abc"]));
+        $this->assertSame([], panier_depuis_formulaire([]));
+    }
+
+    public function test_clients_pour_commande_exclut_demo(): void
+    {
+        $this->assertSame(["client@pivert.demo"], array_column(clients_pour_commande(), "email"));
+    }
 }

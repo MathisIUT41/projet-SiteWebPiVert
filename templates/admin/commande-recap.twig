@@ -1,0 +1,41 @@
+{% extends 'admin/layout.twig' %}
+
+{% block titre %}Commande n° {{ c.commande.id_commande }} · Admin PiVert{% endblock %}
+
+{% block contenu %}
+<section class="page-entete">
+    <p><a class="lien-retour" href="index.php">Tableau de bord</a></p>
+    <h1 class="page-titre">Commande n° {{ c.commande.id_commande }}</h1>
+    <p class="page-intro">
+        <span class="etiquette etiquette--vegetal">{{ c.commande.statut|capitalize }}</span>
+        le {{ c.commande.date_commande|date('d/m/Y') }}
+    </p>
+</section>
+
+<div class="panier">
+    <section class="commande-bloc" aria-labelledby="lignes-titre">
+        <h2 class="commande-bloc-titre" id="lignes-titre">Articles</h2>
+        <ul class="commande-lignes">
+            {% for l in c.lignes %}
+                <li class="commande-ligne theme-{{ l.univers }}">
+                    <img src="{{ base_url }}{{ image_produit(l.photo_nom) }}" alt="" width="56" height="56">
+                    <span class="commande-ligne-nom">{{ l.nom }}</span>
+                    <span class="commande-ligne-qte">× {{ l.quantite }}</span>
+                    <strong>{{ (l.quantite * l.prix_unitaire)|prix }}</strong>
+                </li>
+            {% endfor %}
+        </ul>
+        <p class="confirmation-total"><span>Total</span><strong>{{ c.commande.total|prix }}</strong></p>
+    </section>
+
+    <aside class="panier-recap" aria-labelledby="client-titre">
+        <h2 class="panier-recap-titre" id="client-titre">Client</h2>
+        <p class="commande-adresse">
+            <strong>{{ c.client.prenom }} {{ c.client.nom }}</strong><br>
+            {{ c.client.email }}<br>
+            {{ c.client.adresse }}
+        </p>
+        <a class="bouton bouton--sombre bouton--large" href="commande.php">Nouvelle commande</a>
+    </aside>
+</div>
+{% endblock %}

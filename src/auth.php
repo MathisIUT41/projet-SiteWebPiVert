@@ -142,3 +142,9 @@ function exiger_ecriture_admin(): void
         rediriger(referer_relatif('index.php'));
     }
 }
+
+/** Comptes clients pour lesquels l'admin peut passer une commande. */
+function clients_pour_commande(): array
+{
+    return db_tous("SELECT id_client, prenom, nom, email FROM CLIENT WHERE role = 'client' ORDER BY nom, prenom");
+}

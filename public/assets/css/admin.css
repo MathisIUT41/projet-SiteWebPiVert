@@ -332,3 +332,77 @@
         flex-direction: column-reverse;
     }
 }
+
+/* ---------- Commande pour un client ---------- */
+.commande-admin {
+    display: grid;
+    gap: 12px;
+    margin-top: 16px;
+}
+
+.commande-admin fieldset {
+    margin: 0;
+    border: 0;
+    min-width: 0;
+}
+
+.commande-admin-client {
+    max-width: 520px;
+}
+
+.commande-admin-produits {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 6px 24px;
+}
+
+.commande-admin-produits li {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto auto 84px;
+    align-items: center;
+    gap: 12px;
+    padding: 6px 0;
+    border-bottom: 1px solid var(--trait);
+}
+
+.commande-admin-produits label {
+    font-weight: 600;
+}
+
+.commande-admin-prix {
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.commande-admin-stock {
+    color: var(--texte-doux);
+    font-size: 0.85rem;
+    white-space: nowrap;
+}
+
+.commande-admin-produits input {
+    width: 84px;
+    min-height: 40px;
+    padding: 6px 10px;
+    border: 1.5px solid var(--trait);
+    border-radius: var(--rayon-petit);
+    background: var(--blanc);
+    text-align: center;
+}
+
+@media (max-width: 900px) {
+    .commande-admin-produits {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 520px) {
+    .commande-admin-produits li {
+        grid-template-columns: minmax(0, 1fr) 72px;
+    }
+
+    .commande-admin-prix,
+    .commande-admin-stock {
+        display: none;
+    }
+}

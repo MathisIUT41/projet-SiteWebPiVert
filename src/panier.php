@@ -91,3 +91,21 @@ function stock_produit(int $id): ?int
 
     return $ligne === null ? null : (int) $ligne['quantite'];
 }
+
+/**
+ * Panier saisi dans le formulaire de commande de l'admin (quantites[id] = qte) :
+ * ne garde que les identifiants et quantités entiers strictement positifs.
+ */
+function panier_depuis_formulaire(array $quantites): array
+{
+    $panier = [];
+    foreach ($quantites as $id => $qte) {
+        $id = filter_var($id, FILTER_VALIDATE_INT);
+        $qte = filter_var($qte, FILTER_VALIDATE_INT);
+        if ($id !== false && $id > 0 && $qte !== false && $qte > 0) {
+            $panier[$id] = $qte;
+        }
+    }
+
+    return $panier;
+}
