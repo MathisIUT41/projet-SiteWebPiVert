@@ -1,0 +1,152 @@
+{% extends 'admin/layout.twig' %}
+{% import 'partials/icones.twig' as i %}
+
+{% block titre %}{{ produit ? 'Modifier ' ~ produit.nom : 'Nouveau produit' }} · Admin PiVert{% endblock %}
+
+{% macro erreur(erreurs, champ) %}
+    {% if erreurs[champ] is defined %}<p class="champ-erreur" id="erreur-{{ champ }}">{{ erreurs[champ] }}</p>{% endif %}
+{% endmacro %}
+
+{% macro ligne_caracteristique(index, c, icones) %}
+    {% import 'partials/icones.twig' as i %}
+    <li class="caracteristique-ligne">
+        <div class="champ">
+            <label for="carac-{{ index }}-libelle">Libellé</label>
+            <input id="carac-{{ index }}-libelle" type="text" name="caracteristiques[{{ index }}][libelle]" maxlength="60" value="{{ c.libelle ?? '' }}" placeholder="Arrosage">
+        </div>
+        <div class="champ">
+            <label for="carac-{{ index }}-valeur">Valeur</label>
+            <input id="carac-{{ index }}-valeur" type="text" name="caracteristiques[{{ index }}][valeur]" maxlength="60" value="{{ c.valeur ?? '' }}" placeholder="1× par semaine">
+        </div>
+        <div class="champ">
+            <label for="carac-{{ index }}-icone">Icône</label>
+            <select id="carac-{{ index }}-icone" name="caracteristiques[{{ index }}][icone]">
+                {% for nom in icones %}
+                    <option value="{{ nom }}"{% if (c.icone ?? '') == nom %} selected{% endif %}>{{ nom|capitalize }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <button type="button" class="bouton-icone bouton-icone--danger" data-retirer-caracteristique aria-label="Retirer cette caractéristique">{{ i.icone('poubelle') }}</button>
+    </li>
+{% endmacro %}
+
+{% block contenu %}
+{% import _self as f %}
+<section class="page-entete">
+    <p><a class="lien-retour" href="index.php">Tableau de bord</a></p>
+    <h1 class="page-titre">{{ produit ? produit.nom : 'Nouveau produit' }}</h1>
+</section>
+
+{% if erreurs is not empty %}
+    <p class="message-erreur" role="alert">Le produit n'est pas enregistré : corrige les champs signalés.</p>
+{% endif %}
+
+<form class="produit-form" method="post" action="produit.php{{ produit ? '?id=' ~ produit.id_produit }}" enctype="multipart/form-data" novalidate>
+    <input type="hidden" name="csrf" value="{{ csrf }}">
+
+    <div class="produit-form-colonne">
+        <section class="commande-bloc">
+            <h2 class="commande-bloc-titre">Informations</h2>
+
+            <div class="champ{{ erreurs.nom is defined ? ' a-erreur' }}">
+                <label for="nom">Nom</label>
+                <input id="nom" type="text" name="nom" maxlength="255" required value="{{ saisie.nom }}"{% if erreurs.nom is defined %} aria-invalid="true" aria-describedby="erreur-nom"{% endif %}>
+                {{ f.erreur(erreurs, 'nom') }}
+            </div>
+
+            <div class="champ{{ erreurs.description is defined ? ' a-erreur' }}">
+                <label for="description">Description</label>
+                <textarea id="description" name="description" maxlength="255" required{% if erreurs.description is defined %} aria-invalid="true" aria-describedby="erreur-description"{% endif %}>{{ saisie.description }}</textarea>
+                {{ f.erreur(erreurs, 'description') }}
+            </div>
+
+            <div class="formulaire-ligne">
+                <div class="champ{{ erreurs.prix is defined ? ' a-erreur' }}">
+                    <label for="prix">Prix (€)</label>
+                    <input id="prix" type="text" name="prix" inputmode="decimal" required value="{{ saisie.prix }}"{% if erreurs.prix is defined %} aria-invalid="true" aria-describedby="erreur-prix"{% endif %}>
+                    {{ f.erreur(erreurs, 'prix') }}
+                </div>
+                <div class="champ{{ erreurs.quantite is defined ? ' a-erreur' }}">
+                    <label for="quantite">Stock</label>
+                    <input id="quantite" type="number" name="quantite" min="0" step="1" required value="{{ saisie.quantite }}"{% if erreurs.quantite is defined %} aria-invalid="true" aria-describedby="erreur-quantite"{% endif %}>
+                    {{ f.erreur(erreurs, 'quantite') }}
+                </div>
+            </div>
+
+            <div class="formulaire-ligne">
+                <div class="champ{{ erreurs.id_categorie is defined ? ' a-erreur' }}">
+                    <label for="id_categorie">Catégorie</label>
+                    <select id="id_categorie" name="id_categorie" required>
+                        <option value="">Choisir…</option>
+                        {% for u, libelle in {vegetal: 'Univers Végétal', animalier: 'Univers Animalier'} %}
+                            <optgroup label="{{ libelle }}">
+                                {% for c in categories|filter(c => c.univers == u) %}
+                                    <option value="{{ c.id_categorie }}" data-univers="{{ c.univers }}"{% if saisie.id_categorie == c.id_categorie ~ '' %} selected{% endif %}>{{ c.libelle }}</option>
+                                {% endfor %}
+                            </optgroup>
+                        {% endfor %}
+                    </select>
+                    {{ f.erreur(erreurs, 'id_categorie') }}
+                </div>
+                <div class="champ{{ erreurs.id_marque is defined ? ' a-erreur' }}">
+                    <label for="id_marque">Marque</label>
+                    <select id="id_marque" name="id_marque">
+                        <option value="">Aucune</option>
+                        {% for m in marques %}
+                            <option value="{{ m.id_marque }}"{% if saisie.id_marque == m.id_marque ~ '' %} selected{% endif %}>{{ m.nom_marque }}</option>
+                        {% endfor %}
+                    </select>
+                    {{ f.erreur(erreurs, 'id_marque') }}
+                </div>
+            </div>
+
+            <div class="champ champ-animal{{ erreurs.espece is defined ? ' a-erreur' }}" id="champ-animal">
+                <label for="espece">Animal</label>
+                <select id="espece" name="espece" aria-describedby="aide-espece">
+                    <option value="">Tous animaux</option>
+                    {% for slug, libelle in especes %}
+                        <option value="{{ slug }}"{% if saisie.espece == slug %} selected{% endif %}>{{ libelle }}</option>
+                    {% endfor %}
+                </select>
+                <p class="champ-aide" id="aide-espece">Seulement pour l'Univers Animalier : sert aux filtres de la boutique.</p>
+                {{ f.erreur(erreurs, 'espece') }}
+            </div>
+        </section>
+    </div>
+
+    <div class="produit-form-colonne">
+        <section class="commande-bloc">
+            <h2 class="commande-bloc-titre">Photo</h2>
+            <img class="produit-form-apercu" id="apercu-photo" src="{{ base_url }}{{ image_produit(produit.photo_nom ?? null) }}" alt="" width="400" height="300">
+            <div class="champ{{ erreurs.photo is defined ? ' a-erreur' }}">
+                <label for="photo">{{ produit and produit.photo_nom ? 'Remplacer la photo' : 'Ajouter une photo' }}</label>
+                <input id="photo" type="file" name="photo" accept="image/jpeg,image/png,image/webp" aria-describedby="aide-photo">
+                <p class="champ-aide" id="aide-photo">JPG, PNG ou WebP, 3 Mo maximum.</p>
+                {{ f.erreur(erreurs, 'photo') }}
+            </div>
+        </section>
+
+        <section class="commande-bloc">
+            <h2 class="commande-bloc-titre">Caractéristiques</h2>
+            <p class="champ-aide">Affichées dans la pop-up produit (6 maximum).</p>
+            {{ f.erreur(erreurs, 'caracteristiques') }}
+            <ul class="caracteristiques-liste" id="caracteristiques-liste" data-prochain-index="{{ saisie.caracteristiques|length }}">
+                {% for c in saisie.caracteristiques %}
+                    {{ f.ligne_caracteristique(loop.index0, c, icones) }}
+                {% endfor %}
+            </ul>
+            <template id="modele-ligne-caracteristique">{{ f.ligne_caracteristique('__INDEX__', {}, icones) }}</template>
+            <button type="button" class="bouton bouton--contour" id="ajouter-caracteristique">{{ i.icone('plus') }}Ajouter une caractéristique</button>
+        </section>
+    </div>
+
+    <div class="produit-form-actions">
+        <a class="bouton bouton--contour" href="index.php">Annuler</a>
+        <button class="bouton bouton--sombre" type="submit">Enregistrer le produit</button>
+    </div>
+</form>
+{% endblock %}
+
+{% block scripts %}
+    <script type="module" src="{{ base_url }}assets/js/admin-produit.js"></script>
+{% endblock %}

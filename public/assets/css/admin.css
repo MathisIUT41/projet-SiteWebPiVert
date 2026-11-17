@@ -231,3 +231,104 @@
         border-radius: var(--rayon-moyen);
     }
 }
+
+/* ---------- Formulaire produit ---------- */
+.lien-retour {
+    font-weight: 600;
+    text-underline-offset: 3px;
+}
+
+.lien-retour::before {
+    content: "‹ ";
+}
+
+.produit-form {
+    display: grid;
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+    gap: 12px;
+    align-items: start;
+    margin-top: 16px;
+}
+
+.produit-form-colonne {
+    display: grid;
+    gap: 12px;
+}
+
+.produit-form .commande-bloc {
+    gap: 16px;
+}
+
+.champ-animal[hidden] {
+    display: none;
+}
+
+.produit-form-apercu {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    height: auto;
+    border-radius: var(--rayon-moyen);
+    object-fit: contain;
+    background: var(--blanc);
+    border: 1px solid var(--trait);
+}
+
+.champ input[type="file"] {
+    padding: 10px;
+}
+
+.caracteristiques-liste {
+    display: grid;
+    gap: 10px;
+}
+
+.caracteristique-ligne {
+    display: grid;
+    grid-template-columns: 1fr 1fr 0.8fr auto;
+    align-items: end;
+    gap: 8px;
+    padding: 12px;
+    border-radius: var(--rayon-moyen);
+    background: var(--fond);
+}
+
+.caracteristique-ligne .champ label {
+    font-size: 0.8rem;
+}
+
+.caracteristique-ligne .champ input,
+.caracteristique-ligne .champ select {
+    min-height: 40px;
+    padding: 6px 12px;
+}
+
+.caracteristique-ligne .bouton-icone {
+    background: var(--blanc);
+    margin-bottom: 1px;
+}
+
+.produit-form-actions {
+    grid-column: 1 / -1;
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    padding: 16px;
+    border-radius: var(--rayon-carte);
+    background: var(--blanc);
+}
+
+@media (max-width: 900px) {
+    .produit-form {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 520px) {
+    .caracteristique-ligne {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .produit-form-actions {
+        flex-direction: column-reverse;
+    }
+}
