@@ -1,0 +1,5 @@
+/vendor/
+/node_modules/
+/config.php
+.phpunit.cache/
+public/images/produits/upload-*

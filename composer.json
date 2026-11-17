@@ -1,0 +1,15 @@
+{
+    "name": "mathisbeaussier/pivert",
+    "description": "PiVert faunes & flores — refonte du site e-commerce de la SAÉ 203",
+    "type": "project",
+    "require": {
+        "php": ">=8.2",
+        "twig/twig": "^3.14"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^11"
+    },
+    "config": {
+        "sort-packages": true
+    }
+}
