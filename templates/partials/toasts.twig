@@ -1,0 +1,7 @@
+{% if flashs %}
+    <div class="toasts" role="status" aria-live="polite">
+        {% for f in flashs %}
+            <p class="toast toast--{{ f.type }}">{{ f.message }}</p>
+        {% endfor %}
+    </div>
+{% endif %}

@@ -1,0 +1,42 @@
+/* PiVert — tokens de la direction « Serre » v2.
+   Citron et corail ne servent que de FONDS, avec du texte --vert dessus.
+   Texte citron/corail permis uniquement sur fond --vert. */
+:root {
+    --vert: #12351F;
+    --fond: #EEF2E6;
+    --blanc: #FFFFFF;
+    --citron: #C6F05A;
+    --corail: #FF8A66;
+
+    /* Accent par défaut (pages neutres) ; redéfini par univers ci-dessous. */
+    --accent: var(--citron);
+
+    --texte: var(--vert);
+    --texte-doux: rgb(18 53 31 / 0.72);
+    --trait: rgb(18 53 31 / 0.14);
+    --voile: rgb(18 53 31 / 0.55);
+    --erreur: #A3261B;
+    --fond-erreur: #FDE7E2;
+
+    --police: "Bricolage Grotesque", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+
+    --rayon-grand: 28px;
+    --rayon-carte: 22px;
+    --rayon-moyen: 16px;
+    --rayon-petit: 10px;
+    --rayon-pilule: 999px;
+
+    --largeur: 1240px;
+    --gouttiere: clamp(16px, 4vw, 32px);
+    --espace: 12px;
+}
+
+body[data-univers="vegetal"],
+.theme-vegetal {
+    --accent: var(--citron);
+}
+
+body[data-univers="animalier"],
+.theme-animalier {
+    --accent: var(--corail);
+}

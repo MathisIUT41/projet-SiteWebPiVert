@@ -1,0 +1,43 @@
+{% import 'partials/icones.twig' as i %}
+<header class="entete">
+    <nav class="nav" aria-label="Navigation principale">
+        <a class="nav-logo" href="{{ base_url }}index.php"><span class="nav-logo-pi">Pi</span>Vert<span class="visuellement-cache"> faunes &amp; flores, accueil</span></a>
+
+        <ul class="nav-liens" id="nav-liens">
+            <li><a class="nav-lien{{ univers == 'vegetal' ? ' est-actif' }}" href="{{ base_url }}univers.php?u=vegetal"{% if univers == 'vegetal' %} aria-current="page"{% endif %}>Végétal</a></li>
+            <li><a class="nav-lien{{ univers == 'animalier' ? ' est-actif' }}" href="{{ base_url }}univers.php?u=animalier"{% if univers == 'animalier' %} aria-current="page"{% endif %}>Animalier</a></li>
+            <li><a class="nav-lien{{ page == 'conseils' ? ' est-actif' }}" href="{{ base_url }}conseils.php"{% if page == 'conseils' %} aria-current="page"{% endif %}>Conseils</a></li>
+            <li><a class="nav-lien" href="{{ base_url }}index.php#contact">Contact</a></li>
+            {% if client and client.role in ['admin', 'demo'] %}
+                <li><a class="nav-lien" href="{{ base_url }}admin/index.php">Admin</a></li>
+            {% endif %}
+            {% if client %}
+                <li class="nav-deconnexion-mobile">
+                    <form method="post" action="{{ base_url }}deconnexion.php">
+                        <input type="hidden" name="csrf" value="{{ csrf }}">
+                        <button class="nav-lien" type="submit">Se déconnecter</button>
+                    </form>
+                </li>
+            {% endif %}
+        </ul>
+
+        <div class="nav-actions">
+            {% if client %}
+                <span class="nav-prenom">{{ i.icone('compte') }}<span>{{ client.prenom }}</span></span>
+                <form class="nav-deconnexion" method="post" action="{{ base_url }}deconnexion.php">
+                    <input type="hidden" name="csrf" value="{{ csrf }}">
+                    <button type="submit">Se déconnecter</button>
+                </form>
+            {% else %}
+                <a class="nav-compte" href="{{ base_url }}compte.php?retour={{ page_courante|url_encode }}">{{ i.icone('compte') }}<span>Connexion</span></a>
+            {% endif %}
+            <a class="nav-panier" href="{{ base_url }}panier.php">
+                {{ i.icone('panier') }}<span class="nav-panier-texte">Panier</span>
+                <span class="nav-panier-nombre">{{ panier_nombre }}</span><span class="visuellement-cache"> article{{ panier_nombre > 1 ? 's' }}</span>
+            </a>
+            <button class="nav-menu-bouton" type="button" aria-expanded="false" aria-controls="nav-liens">
+                {{ i.icone('menu') }}<span class="visuellement-cache">Menu</span>
+            </button>
+        </div>
+    </nav>
+</header>
