@@ -1,0 +1,46 @@
+{# Pop-up produit générique : une seule pour toute la page, remplie en JS (modale-produit.js)
+   à partir de l'attribut data-produit de la carte cliquée. #}
+{% import 'partials/icones.twig' as i %}
+<dialog class="modale modale-produit" id="modale-produit" aria-labelledby="modale-produit-nom">
+    <button type="button" class="modale-fermer" data-fermer-modale aria-label="Fermer">{{ i.icone('fermer') }}</button>
+
+    <div class="modale-produit-photo">
+        <img id="modale-produit-image" src="{{ base_url }}images/produits/defaut.svg" alt="" width="560" height="360">
+    </div>
+
+    <div class="modale-produit-corps">
+        <p class="modale-produit-etiquettes" id="modale-produit-etiquettes"></p>
+        <div class="modale-produit-tete">
+            <h2 class="modale-produit-nom" id="modale-produit-nom"></h2>
+            <p class="modale-produit-prix" id="modale-produit-prix"></p>
+        </div>
+        <p class="modale-produit-description" id="modale-produit-description"></p>
+
+        <ul class="modale-produit-caracteristiques" id="modale-produit-caracteristiques" aria-label="Caractéristiques"></ul>
+
+        <form class="modale-produit-achat" method="post" action="{{ base_url }}panier-action.php">
+            <input type="hidden" name="csrf" value="{{ csrf }}">
+            <input type="hidden" name="action" value="ajouter">
+            <input type="hidden" name="id" id="modale-produit-id" value="">
+            <input type="hidden" name="retour" value="{{ page_courante }}">
+
+            <div class="quantite" id="modale-produit-quantite" role="group" aria-label="Quantité">
+                <button type="button" class="quantite-bouton" data-quantite="-1" aria-label="Enlever un">{{ i.icone('moins') }}</button>
+                <input class="quantite-valeur" id="modale-produit-qte" type="number" name="qte" value="1" min="1" max="1" inputmode="numeric" aria-label="Quantité">
+                <button type="button" class="quantite-bouton" data-quantite="1" aria-label="Ajouter un">{{ i.icone('plus') }}</button>
+            </div>
+            <button class="bouton modale-produit-cta" id="modale-produit-cta" type="submit">Ajouter au panier</button>
+        </form>
+    </div>
+
+    <template id="modele-caracteristique">
+        <li class="caracteristique">
+            <span class="caracteristique-icone"></span>
+            <span class="caracteristique-libelle"></span>
+            <strong class="caracteristique-valeur"></strong>
+        </li>
+    </template>
+    {% for nom in ['soleil', 'goutte', 'regle', 'thermometre', 'sablier', 'assiette', 'maison', 'patte', 'feuille', 'outil'] %}
+        <template data-icone="{{ nom }}">{{ i.icone(nom) }}</template>
+    {% endfor %}
+</dialog>

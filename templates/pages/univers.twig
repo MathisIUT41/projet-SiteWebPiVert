@@ -43,10 +43,11 @@
 </section>
 
 {% include 'partials/modale-conseil.twig' %}
-{% block modale_produit %}{% endblock %}
+{% include 'partials/modale-produit.twig' %}
 {% endblock %}
 
 {% block scripts %}
     <script type="module" src="assets/js/recherche.js"></script>
     <script type="module" src="assets/js/modale-conseil.js"></script>
+    <script type="module" src="assets/js/modale-produit.js"></script>
 {% endblock %}

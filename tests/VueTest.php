@@ -36,4 +36,18 @@ final class VueTest extends BaseTestCase
         $this->assertSame('panier.php', url_retour_sure('panier.php'));
         $this->assertSame('univers.php?u=vegetal', url_retour_sure('univers.php?u=vegetal'));
     }
+    public function test_carte_produit_echappe_le_json(): void
+    {
+        $p = ["id_produit" => 1, "nom" => "\"><script>x</script>", "prix" => 1.0, "quantite" => 1, "photo_nom" => null, "libelle_categorie" => "A", "slug_categorie" => "a", "espece" => null, "libelle_espece" => null, "univers" => "vegetal", "description" => "", "caracteristiques" => []];
+        $html = rendu_chaine("partials/carte-produit.twig", ["produit" => $p]);
+        $this->assertStringNotContainsString("<script>x", $html);
+        $this->assertStringContainsString("data-produit=", $html);
+    }
+
+    public function test_modale_produit_presente_sur_la_page_univers(): void
+    {
+        $html = rendu_chaine("pages/univers.twig", ["univers" => "vegetal", "titre_univers" => "Végétal", "filtres" => [], "filtre_actif" => null, "produits" => [], "conseils" => []]);
+        $this->assertStringContainsString("id=\"modale-produit\"", $html);
+        $this->assertStringContainsString("modale-produit.js", $html);
+    }
 }
