@@ -1,0 +1,6 @@
+{% import 'partials/icones.twig' as i %}
+<article class="carte-conseil">
+    <span class="carte-conseil-icone">{{ i.icone(conseil.icone) }}</span>
+    <h3 class="carte-conseil-titre">{{ conseil.titre }}</h3>
+    <button type="button" class="bouton-texte" data-ouvrir-conseil data-titre="{{ conseil.titre }}" data-texte="{{ conseil.texte }}">Lire le conseil</button>
+</article>

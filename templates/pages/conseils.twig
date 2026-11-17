@@ -1,0 +1,27 @@
+{% extends 'base.twig' %}
+
+{% block titre %}Conseils · PiVert{% endblock %}
+
+{% block contenu %}
+<section class="page-entete">
+    <h1 class="page-titre">Nos conseils</h1>
+    <p class="page-intro">Des gestes simples pour que tes plantes poussent bien et que tes animaux se sentent bien.</p>
+</section>
+
+{% for u, libelle in {vegetal: 'Pour tes plantes', animalier: 'Pour tes animaux'} %}
+    <section class="conseils theme-{{ u }}" aria-labelledby="conseils-{{ u }}">
+        <h2 class="section-titre" id="conseils-{{ u }}"><span class="etiquette">{{ u == 'vegetal' ? 'Végétal' : 'Animalier' }}</span> {{ libelle }}</h2>
+        <div class="grille-conseils">
+            {% for conseil in conseils[u] %}
+                {% include 'partials/carte-conseil.twig' %}
+            {% endfor %}
+        </div>
+    </section>
+{% endfor %}
+
+{% include 'partials/modale-conseil.twig' %}
+{% endblock %}
+
+{% block scripts %}
+    <script type="module" src="assets/js/modale-conseil.js"></script>
+{% endblock %}

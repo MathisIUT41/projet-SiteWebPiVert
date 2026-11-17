@@ -1,0 +1,31 @@
+{% import 'partials/icones.twig' as i %}
+{% set p = produit %}
+<article class="carte-produit{{ avec_etiquette|default(false) ? ' theme-' ~ p.univers }}"
+         data-produit="{{ p|json_encode|e('html_attr') }}"
+         data-recherche="{{ p.nom }} {{ p.libelle_categorie }} {{ p.libelle_espece }}">
+    <button type="button" class="carte-produit-photo" data-ouvrir-modale tabindex="-1" aria-hidden="true">
+        <img src="{{ base_url }}{{ image_produit(p.photo_nom) }}" alt="" loading="lazy" width="400" height="300">
+        {% if avec_etiquette|default(false) %}
+            <span class="etiquette carte-produit-etiquette">{{ p.univers == 'vegetal' ? 'Végétal' : 'Animalier' }}</span>
+        {% endif %}
+    </button>
+    <div class="carte-produit-corps">
+        <h3 class="carte-produit-nom"><button type="button" data-ouvrir-modale>{{ p.nom }}</button></h3>
+        <p class="carte-produit-prix">{{ p.prix|prix }}</p>
+    </div>
+    <div class="carte-produit-pied">
+        <span class="carte-produit-categorie">{{ p.libelle_espece ?: p.libelle_categorie }}</span>
+        {% if p.quantite > 0 %}
+            <form method="post" action="{{ base_url }}panier-action.php">
+                <input type="hidden" name="csrf" value="{{ csrf }}">
+                <input type="hidden" name="action" value="ajouter">
+                <input type="hidden" name="id" value="{{ p.id_produit }}">
+                <input type="hidden" name="qte" value="1">
+                <input type="hidden" name="retour" value="{{ page_courante }}">
+                <button class="bouton-rond" type="submit" aria-label="Ajouter « {{ p.nom }} » au panier">{{ i.icone('plus') }}</button>
+            </form>
+        {% else %}
+            <span class="etiquette etiquette--neutre">Rupture</span>
+        {% endif %}
+    </div>
+</article>

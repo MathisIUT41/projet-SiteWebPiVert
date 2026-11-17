@@ -77,3 +77,178 @@
         margin-top: 20px;
     }
 }
+
+/* ---------- En-têtes de page et titres de section ---------- */
+.page-entete {
+    display: grid;
+    gap: 10px;
+    margin: 32px 0 8px;
+}
+
+.page-titre {
+    font-size: clamp(2.4rem, 7vw, 4rem);
+}
+
+.page-intro {
+    max-width: 56ch;
+    color: var(--texte-doux);
+    font-size: 1.1rem;
+}
+
+.section-titre {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 18px;
+    font-size: clamp(1.7rem, 4vw, 2.4rem);
+}
+
+/* ---------- Page univers ---------- */
+.univers-bandeau {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: end;
+    gap: 20px;
+    margin-top: 14px;
+    padding: clamp(22px, 4vw, 34px);
+    border-radius: var(--rayon-grand);
+    background: var(--accent);
+    overflow: hidden;
+}
+
+.univers-sur-titre {
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+.univers-titre {
+    font-size: clamp(3rem, 10vw, 5.5rem);
+    letter-spacing: -0.05em;
+    line-height: 0.9;
+}
+
+.recherche {
+    position: relative;
+    width: min(320px, 100%);
+}
+
+.recherche input {
+    width: 100%;
+    min-height: 48px;
+    padding: 10px 46px 10px 20px;
+    border: 0;
+    border-radius: var(--rayon-pilule);
+    background: var(--blanc);
+}
+
+.recherche input::-webkit-search-cancel-button {
+    cursor: pointer;
+}
+
+.recherche .icone {
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+}
+
+.filtres {
+    display: flex;
+    gap: 8px;
+    margin: 14px 0 0;
+    padding-bottom: 4px;
+    overflow-x: auto;
+    scrollbar-width: none;
+}
+
+.filtre {
+    flex-shrink: 0;
+    padding: 9px 16px;
+    border-radius: var(--rayon-pilule);
+    background: var(--blanc);
+    font-weight: 600;
+    font-size: 0.92rem;
+    text-decoration: none;
+}
+
+.filtre:hover {
+    box-shadow: inset 0 0 0 1.5px var(--vert);
+}
+
+.filtre.est-actif {
+    background: var(--vert);
+    color: var(--accent);
+}
+
+.univers-compte {
+    margin: 16px 4px 10px;
+    color: var(--texte-doux);
+    font-size: 0.92rem;
+}
+
+.grille-produits {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 12px;
+}
+
+.aucun-resultat {
+    padding: 40px 20px;
+    border-radius: var(--rayon-carte);
+    background: var(--blanc);
+    text-align: center;
+    font-weight: 600;
+}
+
+.conseils {
+    margin-top: 56px;
+}
+
+.grille-conseils {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+}
+
+@media (max-width: 1000px) {
+    .grille-produits {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 760px) {
+    .univers-bandeau {
+        grid-template-columns: 1fr;
+    }
+
+    .recherche {
+        width: 100%;
+    }
+
+    .grille-produits,
+    .grille-conseils {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 420px) {
+    .grille-produits {
+        gap: 8px;
+    }
+
+    .carte-produit {
+        padding: 8px;
+    }
+
+    .carte-produit-corps {
+        flex-direction: column;
+        gap: 2px;
+    }
+
+    .grille-conseils {
+        grid-template-columns: 1fr;
+    }
+}

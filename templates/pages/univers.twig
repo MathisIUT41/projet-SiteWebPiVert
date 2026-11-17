@@ -1,0 +1,52 @@
+{% extends 'base.twig' %}
+{% import 'partials/icones.twig' as i %}
+
+{% block titre %}Univers {{ titre_univers }} · PiVert{% endblock %}
+
+{% block contenu %}
+<section class="univers-bandeau" aria-labelledby="univers-titre">
+    <div>
+        <p class="univers-sur-titre">Univers</p>
+        <h1 class="univers-titre" id="univers-titre">{{ titre_univers }}</h1>
+    </div>
+    <form class="recherche" role="search" data-recherche-formulaire hidden>
+        <label class="visuellement-cache" for="recherche">Rechercher dans l'univers {{ titre_univers }}</label>
+        <input id="recherche" type="search" autocomplete="off"
+               placeholder="{{ univers == 'vegetal' ? 'Une plante, un outil…' : 'Un animal, un jouet…' }}">
+        {{ i.icone('recherche') }}
+    </form>
+</section>
+
+<nav class="filtres" aria-label="Filtrer les produits">
+    <a class="filtre{{ filtre_actif is null ? ' est-actif' }}" href="univers.php?u={{ univers }}"{% if filtre_actif is null %} aria-current="page"{% endif %}>Tout</a>
+    {% for slug, libelle in filtres %}
+        <a class="filtre{{ filtre_actif == slug ? ' est-actif' }}" href="univers.php?u={{ univers }}&amp;filtre={{ slug }}"{% if filtre_actif == slug %} aria-current="page"{% endif %}>{{ libelle }}</a>
+    {% endfor %}
+</nav>
+
+<p class="univers-compte" id="compte-resultats" aria-live="polite">{{ produits|length }} produit{{ produits|length > 1 ? 's' }}</p>
+
+<div class="grille-produits">
+    {% for produit in produits %}
+        {% include 'partials/carte-produit.twig' %}
+    {% endfor %}
+</div>
+<p class="aucun-resultat" id="aucun-resultat" hidden>Aucun produit ne correspond à ta recherche.</p>
+
+<section class="conseils" id="conseils" aria-labelledby="conseils-titre">
+    <h2 class="section-titre" id="conseils-titre">{{ univers == 'vegetal' ? 'Coin conseils' : 'Conseils et formations' }}</h2>
+    <div class="grille-conseils">
+        {% for conseil in conseils %}
+            {% include 'partials/carte-conseil.twig' %}
+        {% endfor %}
+    </div>
+</section>
+
+{% include 'partials/modale-conseil.twig' %}
+{% block modale_produit %}{% endblock %}
+{% endblock %}
+
+{% block scripts %}
+    <script type="module" src="assets/js/recherche.js"></script>
+    <script type="module" src="assets/js/modale-conseil.js"></script>
+{% endblock %}
