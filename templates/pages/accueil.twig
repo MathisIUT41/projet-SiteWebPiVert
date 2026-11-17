@@ -1,0 +1,75 @@
+{% extends 'base.twig' %}
+{% import 'partials/icones.twig' as i %}
+
+{% block contenu %}
+<section class="bento" aria-label="Bienvenue">
+    <div class="bento-principale sur-sombre">
+        <h1 class="bento-titre">Fais pousser <span class="texte-citron">ta jungle.</span> Adopte <span class="texte-corail">ta bande.</span></h1>
+        <p class="bento-texte">Plantes, arbres, animaux, et tout ce qu'il faut pour en prendre soin.</p>
+        <div class="bento-boutons">
+            <a class="bouton bouton--vegetal" href="univers.php?u=vegetal">Univers Végétal</a>
+            <a class="bouton bouton--animalier" href="univers.php?u=animalier">Univers Animalier</a>
+        </div>
+    </div>
+
+    <a class="bento-tuile bento-vegetal" href="univers.php?u=vegetal">
+        <img src="images/site/monstera.jpg" alt="" width="600" height="400">
+        <span class="etiquette etiquette--blanche bento-rayons">{{ nb_rayons.vegetal }} rayons</span>
+        <span class="etiquette etiquette--vegetal bento-libelle">Univers Végétal</span>
+    </a>
+
+    <a class="bento-tuile bento-animalier" href="univers.php?u=animalier">
+        <img src="images/site/chat.jpg" alt="" width="600" height="800">
+        <span class="etiquette etiquette--blanche bento-rayons">{{ nb_rayons.animalier }} rayons</span>
+        <span class="etiquette etiquette--animalier bento-libelle">Univers Animalier</span>
+    </a>
+
+    <div class="bento-tuile bento-conseil">
+        <p class="bento-conseil-sur-titre">Le conseil du jour</p>
+        <p class="bento-conseil-titre">{{ conseil_du_jour.titre }}</p>
+        <p class="bento-conseil-texte">{{ conseil_du_jour.texte }}</p>
+        <a class="bento-conseil-lien" href="conseils.php">Tous les conseils</a>
+    </div>
+</section>
+
+<section class="accueil-section" aria-labelledby="nouveautes-titre">
+    <h2 class="section-titre" id="nouveautes-titre">Nouveautés</h2>
+    <div class="grille-produits">
+        {% for produit in mis_en_avant %}
+            {% include 'partials/carte-produit.twig' with {avec_etiquette: true} %}
+        {% endfor %}
+    </div>
+</section>
+
+<section class="accueil-section qui-sommes-nous" id="qui-sommes-nous" aria-labelledby="qsn-titre">
+    <div class="qsn-texte">
+        <h2 class="section-titre" id="qsn-titre">Qui sommes-nous ?</h2>
+        <p>Bienvenue dans notre univers végétal et animalier : plantes, fleurs, arbres et animaux de compagnie.</p>
+        <p>On est passionnés par la nature, et on tient à t'offrir les meilleurs produits et les meilleurs conseils pour prendre soin de ton jardin et de tes animaux. Une question, un doute sur le bon produit ? Écris-nous.</p>
+    </div>
+    <ul class="qsn-equipe">
+        <li><img src="images/site/photo-koko.png" alt="" width="240" height="240"><span>Korantin</span></li>
+        <li><img src="images/site/photo-mathis.png" alt="" width="240" height="240"><span>Mathis</span></li>
+    </ul>
+</section>
+
+<section class="accueil-section contact" id="contact" aria-labelledby="contact-titre">
+    <div class="contact-infos">
+        <h2 class="section-titre" id="contact-titre">Contact</h2>
+        <dl>
+            <div><dt>Téléphone</dt><dd><a href="tel:+33067006700">00 67 00 67 00</a></dd></div>
+            <div><dt>Adresse</dt><dd>5 rue de la nature, Blois</dd></div>
+            <div><dt>E-mail</dt><dd><a href="mailto:contact@pivert.fr">contact@pivert.fr</a></dd></div>
+            <div><dt>Horaires</dt><dd>Du lundi au samedi, 9h – 18h</dd></div>
+        </dl>
+    </div>
+    <iframe class="contact-carte" title="Carte : IUT de Blois, site Jean Jaurès" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d5381.696115038213!2d1.334146875713393!3d47.59019737118832!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47e4a81b51bfac85%3A0x59ec794bc418ff3b!2sIUT%20de%20Blois%20%E2%80%A2%20site%20Jean%20Jaur%C3%A8s!5e0!3m2!1sfr!2sfr!4v1779175478492!5m2!1sfr!2sfr"></iframe>
+</section>
+
+{% include 'partials/modale-produit.twig' %}
+{% endblock %}
+
+{% block scripts %}
+    <script type="module" src="assets/js/modale-produit.js"></script>
+{% endblock %}

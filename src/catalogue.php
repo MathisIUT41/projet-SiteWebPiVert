@@ -123,3 +123,30 @@ function ajouter_caracteristiques(array $produits): array
         $produits
     );
 }
+
+/**
+ * Produits mis en avant sur l'accueil : les plus récents en stock,
+ * moitié végétal, moitié animalier, en alternance.
+ */
+function produits_mis_en_avant(int $n = 4): array
+{
+    $parUnivers = [];
+    foreach (array_keys(UNIVERS) as $univers) {
+        $parUnivers[$univers] = array_map('completer_produit', db_tous(
+            SQL_PRODUITS . ' WHERE c.univers = ? AND p.quantite > 0 ORDER BY p.date_ajout DESC, p.id_produit DESC LIMIT ?',
+            'si',
+            [$univers, intdiv($n + 1, 2)]
+        ));
+    }
+
+    $resultat = [];
+    for ($i = 0; count($resultat) < $n && ($i < count($parUnivers['vegetal']) || $i < count($parUnivers['animalier'])); $i++) {
+        foreach (['vegetal', 'animalier'] as $univers) {
+            if (isset($parUnivers[$univers][$i]) && count($resultat) < $n) {
+                $resultat[] = $parUnivers[$univers][$i];
+            }
+        }
+    }
+
+    return $resultat;
+}

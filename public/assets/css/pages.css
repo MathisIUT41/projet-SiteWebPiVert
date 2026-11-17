@@ -252,3 +252,261 @@
         grid-template-columns: 1fr;
     }
 }
+
+/* ---------- Accueil : grille bento ---------- */
+.bento {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr 1fr;
+    grid-template-rows: repeat(2, minmax(190px, auto));
+    gap: 12px;
+    margin-top: 14px;
+}
+
+.bento-principale {
+    grid-row: span 2;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 28px;
+    padding: clamp(24px, 4vw, 36px);
+    border-radius: var(--rayon-grand);
+    background: var(--vert);
+    color: var(--fond);
+}
+
+.bento-titre {
+    font-size: clamp(2.6rem, 5.4vw, 4.4rem);
+    letter-spacing: -0.045em;
+    line-height: 0.95;
+}
+
+.texte-citron { color: var(--citron); }
+.texte-corail { color: var(--corail); }
+
+.bento-texte {
+    max-width: 30ch;
+    font-size: 1.05rem;
+    opacity: 0.85;
+}
+
+.bento-boutons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.bento-tuile {
+    position: relative;
+    min-height: 190px;
+    border-radius: var(--rayon-grand);
+    overflow: hidden;
+    text-decoration: none;
+}
+
+.bento-tuile img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+a.bento-tuile:hover img {
+    transform: scale(1.04);
+}
+
+.bento-animalier {
+    grid-column: 3;
+    grid-row: 1 / span 2;
+}
+
+.bento-vegetal {
+    grid-column: 2;
+    grid-row: 1;
+}
+
+.bento-conseil {
+    grid-column: 2;
+    grid-row: 2;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 20px;
+    background: var(--blanc);
+}
+
+.bento-libelle,
+.bento-rayons {
+    position: absolute;
+}
+
+.bento-libelle {
+    left: 12px;
+    bottom: 12px;
+    padding: 7px 14px;
+    font-size: 0.9rem;
+}
+
+.bento-rayons {
+    right: 12px;
+    top: 12px;
+}
+
+.bento-conseil-sur-titre {
+    color: var(--texte-doux);
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.bento-conseil-titre {
+    font-size: 1.3rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+}
+
+.bento-conseil-texte {
+    color: var(--texte-doux);
+    font-size: 0.92rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.bento-conseil-lien {
+    margin-top: auto;
+    font-weight: 700;
+    text-underline-offset: 3px;
+}
+
+.accueil-section {
+    margin-top: 56px;
+}
+
+/* ---------- Qui sommes-nous ---------- */
+.qui-sommes-nous {
+    display: grid;
+    grid-template-columns: 1.3fr 1fr;
+    gap: 24px;
+    align-items: center;
+    padding: clamp(24px, 4vw, 40px);
+    border-radius: var(--rayon-grand);
+    background: var(--blanc);
+}
+
+.qsn-texte {
+    display: grid;
+    gap: 12px;
+    max-width: 60ch;
+}
+
+.qsn-texte .section-titre {
+    margin-bottom: 4px;
+}
+
+.qsn-equipe {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+}
+
+.qsn-equipe li {
+    display: grid;
+    justify-items: center;
+    gap: 8px;
+    font-weight: 700;
+}
+
+.qsn-equipe img {
+    width: clamp(110px, 14vw, 150px);
+    height: clamp(110px, 14vw, 150px);
+    border-radius: 50%;
+    object-fit: cover;
+    object-position: center top;
+    background: var(--fond);
+}
+
+.qsn-equipe li:first-child img { box-shadow: 0 0 0 6px var(--citron); }
+.qsn-equipe li:last-child img { box-shadow: 0 0 0 6px var(--corail); }
+
+/* ---------- Contact ---------- */
+.contact {
+    display: grid;
+    grid-template-columns: 1fr 1.3fr;
+    gap: 12px;
+}
+
+.contact-infos {
+    padding: clamp(24px, 4vw, 36px);
+    border-radius: var(--rayon-grand);
+    background: var(--accent);
+}
+
+.contact-infos dl {
+    display: grid;
+    gap: 14px;
+    margin: 0;
+}
+
+.contact-infos dt {
+    font-size: 0.85rem;
+    font-weight: 600;
+    opacity: 0.75;
+}
+
+.contact-infos dd {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 700;
+}
+
+.contact-carte {
+    width: 100%;
+    min-height: 320px;
+    border: 0;
+    border-radius: var(--rayon-grand);
+    background: var(--blanc);
+}
+
+@media (max-width: 900px) {
+    .bento {
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: auto;
+    }
+
+    .bento-principale {
+        grid-column: 1 / -1;
+        grid-row: auto;
+    }
+
+    .bento-vegetal,
+    .bento-animalier,
+    .bento-conseil {
+        grid-column: auto;
+        grid-row: auto;
+        min-height: 220px;
+    }
+
+    .bento-conseil {
+        grid-column: 1 / -1;
+        min-height: 0;
+    }
+
+    .qui-sommes-nous,
+    .contact {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 420px) {
+    .bento {
+        grid-template-columns: 1fr;
+    }
+
+    .bento-vegetal,
+    .bento-animalier {
+        min-height: 200px;
+    }
+}

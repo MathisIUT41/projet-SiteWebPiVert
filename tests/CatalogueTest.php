@@ -55,4 +55,11 @@ final class CatalogueTest extends BaseTestCase
         $this->assertSame(conseil_du_jour($d), conseil_du_jour($d));
         $this->assertArrayHasKey('titre', conseil_du_jour($d));
     }
+    public function test_mis_en_avant_alterne_les_univers(): void
+    {
+        $p = produits_mis_en_avant(4);
+        $this->assertSame(["vegetal", "animalier", "vegetal", "animalier"], array_column($p, "univers"));
+        $this->assertGreaterThan(0, min(array_column($p, "quantite")));
+        $this->assertSame("Monstera", $p[0]["nom"]);
+    }
 }
