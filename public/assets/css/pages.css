@@ -510,3 +510,189 @@ a.bento-tuile:hover img {
         min-height: 200px;
     }
 }
+
+/* ---------- Panier ---------- */
+.panier {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 340px;
+    gap: 16px;
+    align-items: start;
+    margin-top: 20px;
+}
+
+.panier-lignes {
+    display: grid;
+    gap: 10px;
+}
+
+.panier-ligne {
+    display: grid;
+    grid-template-columns: 96px minmax(0, 1fr) auto 100px auto;
+    align-items: center;
+    gap: 16px;
+    padding: 10px 16px 10px 10px;
+    border-radius: var(--rayon-carte);
+    background: var(--blanc);
+}
+
+.panier-photo {
+    width: 96px;
+    height: 96px;
+    border-radius: var(--rayon-moyen);
+    object-fit: cover;
+    background: var(--fond);
+}
+
+.panier-infos {
+    display: grid;
+    justify-items: start;
+    gap: 4px;
+}
+
+.panier-nom {
+    font-size: 1.15rem;
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+}
+
+.panier-prix-unitaire {
+    color: var(--texte-doux);
+    font-size: 0.88rem;
+}
+
+.panier-sous-total {
+    font-weight: 800;
+    text-align: right;
+    white-space: nowrap;
+}
+
+.panier-ligne .quantite-valeur {
+    display: inline-block;
+    min-width: 2.2em;
+}
+
+.panier-rupture {
+    color: var(--erreur);
+}
+
+.panier-retirer {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border: 0;
+    border-radius: 50%;
+    background: var(--fond);
+}
+
+.panier-retirer:hover {
+    background: var(--fond-erreur);
+    color: var(--erreur);
+}
+
+.panier-recap {
+    position: sticky;
+    top: 96px;
+    display: grid;
+    gap: 12px;
+    padding: 24px;
+    border-radius: var(--rayon-grand);
+    background: var(--blanc);
+}
+
+.panier-recap-titre {
+    font-size: 1.5rem;
+}
+
+.panier-recap-lignes {
+    display: grid;
+    gap: 8px;
+    margin: 4px 0 8px;
+}
+
+.panier-recap-lignes div {
+    display: flex;
+    justify-content: space-between;
+}
+
+.panier-recap-lignes dt {
+    color: var(--texte-doux);
+}
+
+.panier-recap-lignes dd {
+    margin: 0;
+    font-weight: 600;
+}
+
+.panier-recap-total {
+    padding-top: 12px;
+    border-top: 1px solid var(--trait);
+    font-size: 1.3rem;
+}
+
+.panier-recap-total dt {
+    color: var(--vert);
+    font-weight: 700;
+}
+
+.panier-recap-total dd {
+    font-weight: 800;
+}
+
+.panier-vide {
+    display: grid;
+    justify-items: center;
+    gap: 14px;
+    margin-top: 20px;
+    padding: 48px 24px;
+    border-radius: var(--rayon-grand);
+    background: var(--blanc);
+    text-align: center;
+}
+
+.panier-vide h2 {
+    font-size: 1.9rem;
+}
+
+.panier-vide p {
+    max-width: 44ch;
+    color: var(--texte-doux);
+}
+
+@media (max-width: 900px) {
+    .panier {
+        grid-template-columns: 1fr;
+    }
+
+    .panier-recap {
+        position: static;
+    }
+}
+
+@media (max-width: 620px) {
+    .panier-ligne {
+        grid-template-columns: 72px minmax(0, 1fr) auto;
+        grid-template-areas:
+            "photo infos retirer"
+            "photo quantite total";
+        gap: 8px 12px;
+        padding: 10px;
+    }
+
+    .panier-photo {
+        grid-area: photo;
+        width: 72px;
+        height: 72px;
+    }
+
+    .panier-infos { grid-area: infos; }
+    .panier-ligne .quantite,
+    .panier-rupture { grid-area: quantite; justify-self: start; }
+    .panier-sous-total { grid-area: total; }
+    .panier-ligne > form:last-child { grid-area: retirer; justify-self: end; }
+}
+
+.panier-vide .bento-boutons {
+    justify-content: center;
+}

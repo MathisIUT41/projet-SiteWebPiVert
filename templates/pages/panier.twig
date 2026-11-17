@@ -1,0 +1,81 @@
+{% extends 'base.twig' %}
+{% import 'partials/icones.twig' as i %}
+
+{% block titre %}Mon panier · PiVert{% endblock %}
+
+{% macro formulaire_panier(action, id, qte, csrf, contenu, classe, libelle) %}
+    <form method="post" action="panier-action.php">
+        <input type="hidden" name="csrf" value="{{ csrf }}">
+        <input type="hidden" name="action" value="{{ action }}">
+        <input type="hidden" name="id" value="{{ id }}">
+        <input type="hidden" name="qte" value="{{ qte }}">
+        <input type="hidden" name="retour" value="panier.php">
+        <button class="{{ classe }}" type="submit" aria-label="{{ libelle }}">{{ contenu }}</button>
+    </form>
+{% endmacro %}
+
+{% block contenu %}
+{% import _self as f %}
+<section class="page-entete">
+    <h1 class="page-titre">Mon panier</h1>
+</section>
+
+{% if lignes is empty %}
+    <div class="panier-vide">
+        <span class="carte-conseil-icone">{{ i.icone('panier') }}</span>
+        <h2>Ton panier est vide</h2>
+        <p>Fais un tour dans nos univers : il y a sûrement une plante ou un compagnon qui t'attend.</p>
+        <div class="bento-boutons">
+            <a class="bouton bouton--vegetal" href="univers.php?u=vegetal">Univers Végétal</a>
+            <a class="bouton bouton--animalier" href="univers.php?u=animalier">Univers Animalier</a>
+        </div>
+    </div>
+{% else %}
+    <div class="panier">
+        <ul class="panier-lignes">
+            {% for l in lignes %}
+                <li class="panier-ligne theme-{{ l.univers }}">
+                    <img class="panier-photo" src="{{ image_produit(l.photo_nom) }}" alt="" width="96" height="96">
+                    <div class="panier-infos">
+                        <span class="etiquette">{{ l.univers == 'vegetal' ? 'Végétal' : 'Animalier' }}</span>
+                        <h2 class="panier-nom">{{ l.nom }}</h2>
+                        <p class="panier-prix-unitaire">{{ l.prix|prix }} l'unité</p>
+                    </div>
+
+                    {% if l.stock > 0 %}
+                        <div class="quantite" role="group" aria-label="Quantité de {{ l.nom }}">
+                            {{ f.formulaire_panier('modifier', l.id_produit, l.quantite - 1, csrf, i.icone('moins'), 'quantite-bouton', 'Enlever un ' ~ l.nom) }}
+                            <span class="quantite-valeur" aria-live="polite">{{ l.quantite }}</span>
+                            {% if l.quantite < l.stock %}
+                                {{ f.formulaire_panier('modifier', l.id_produit, l.quantite + 1, csrf, i.icone('plus'), 'quantite-bouton', 'Ajouter un ' ~ l.nom) }}
+                            {% else %}
+                                <button class="quantite-bouton" type="button" disabled aria-label="Stock maximum atteint">{{ i.icone('plus') }}</button>
+                            {% endif %}
+                        </div>
+                        <p class="panier-sous-total">{{ l.sous_total|prix }}</p>
+                    {% else %}
+                        <span class="etiquette etiquette--neutre panier-rupture">{{ i.icone('alerte') }} Plus en stock</span>
+                        <p class="panier-sous-total">{{ 0|prix }}</p>
+                    {% endif %}
+
+                    {{ f.formulaire_panier('retirer', l.id_produit, 0, csrf, i.icone('poubelle'), 'panier-retirer', 'Retirer ' ~ l.nom ~ ' du panier') }}
+                </li>
+            {% endfor %}
+        </ul>
+
+        <aside class="panier-recap" aria-labelledby="recap-titre">
+            <h2 id="recap-titre" class="panier-recap-titre">Récapitulatif</h2>
+            <dl class="panier-recap-lignes">
+                <div><dt>Articles</dt><dd>{{ panier_nombre }}</dd></div>
+                <div class="panier-recap-total"><dt>Total</dt><dd>{{ total|prix }}</dd></div>
+            </dl>
+            {% if commande_possible %}
+                <a class="bouton bouton--sombre bouton--large" href="commande.php">Valider ma commande</a>
+            {% else %}
+                <p class="message-erreur">Les produits de ton panier ne sont plus en stock.</p>
+            {% endif %}
+            <a class="bouton bouton--contour bouton--large" href="index.php">Continuer mes achats</a>
+        </aside>
+    </div>
+{% endif %}
+{% endblock %}

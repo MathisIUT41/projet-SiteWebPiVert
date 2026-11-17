@@ -45,7 +45,7 @@ function rendu_chaine(string $template, array $vars = []): string
 
     $communes = [
         'client' => $_SESSION['client'] ?? null,
-        'panier_nombre' => is_array($panier) ? array_sum($panier) : 0,
+        'panier_nombre' => is_array($panier) ? panier_nombre($panier) : 0,
         'flashs' => flashs_lire(),
         'csrf' => csrf_jeton(),
         'univers' => $vars['univers'] ?? null,
