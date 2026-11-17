@@ -11,8 +11,8 @@ final class DbTest extends BaseTestCase
 
     public function test_requete_preparee_avec_parametre(): void
     {
-        db_executer('INSERT INTO ping (id) VALUES (?)', 'i', [42]);
-        $this->assertSame(42, (int) db_un('SELECT id FROM ping WHERE id = ?', 'i', [42])['id']);
-        $this->assertSame([], db_tous('SELECT id FROM ping WHERE id = ?', 'i', [7]));
+        db_executer('INSERT INTO MARQUE (id_marque, nom_marque) VALUES (?, ?)', 'is', [42, 'Test']);
+        $this->assertSame(42, (int) db_un('SELECT id_marque FROM MARQUE WHERE id_marque = ?', 'i', [42])['id_marque']);
+        $this->assertSame([], db_tous('SELECT id_marque FROM MARQUE WHERE id_marque = ?', 'i', [999]));
     }
 }
