@@ -84,7 +84,7 @@ pivert/
 
 ---
 
-### Tâche 1 : Socle du projet (dépôt, Composer, config, base de données d'accès, tests)
+### Task 1: Socle du projet (dépôt, Composer, config, base de données d'accès, tests)
 
 **Fichiers :**
 - Créer : `pivert/composer.json`, `package.json`, `phpunit.xml`, `.gitignore`, `config.exemple.php`, `config.php`, `src/bootstrap.php`, `src/config.php`, `src/db.php`, `src/installation.php`, `outils/installer-base.php`, `sql/schema.sql` (provisoire : une table `ping (id INT PRIMARY KEY)` remplacée en Tâche 2), `sql/donnees.sql` (provisoire : vide), `tests/bootstrap.php`, `tests/BaseTestCase.php`, `docs/` (copie de la spec et du plan)
@@ -120,7 +120,7 @@ public function test_requete_preparee_avec_parametre(): void {
 
 ---
 
-### Tâche 2 : Schéma et données de démonstration
+### Task 2: Schéma et données de démonstration
 
 **Fichiers :**
 - Modifier : `sql/schema.sql`, `sql/donnees.sql`
@@ -195,7 +195,7 @@ public function test_comptes_de_demo_hachés_et_aucun_admin(): void {
 
 ---
 
-### Tâche 3 : Système visuel, gabarit Twig, flash et CSRF
+### Task 3: Système visuel, gabarit Twig, flash et CSRF
 
 **Fichiers :**
 - Créer : `src/http.php`, `src/flash.php`, `src/csrf.php`, `src/vue.php`, `templates/base.twig`, `templates/partials/{nav,footer,toasts,icones}.twig`, `public/assets/css/{tokens,base,composants}.css`, `public/assets/js/nav.js`, `public/index.php` (provisoire : page vide qui étend `base.twig`)
@@ -266,7 +266,7 @@ test('citron sur blanc < 3 (interdit en texte)', () => assert.ok(ratio('#C6F05A'
 
 ---
 
-### Tâche 4 : Comptes (inscription, connexion, déconnexion, rôles)
+### Task 4: Comptes (inscription, connexion, déconnexion, rôles)
 
 **Fichiers :**
 - Créer : `src/auth.php`, `public/compte.php`, `public/deconnexion.php`, `templates/pages/compte.twig`
@@ -320,7 +320,7 @@ public function test_roles(): void {
 
 ---
 
-### Tâche 5 : Catalogue et page univers (filtres, recherche, conseils)
+### Task 5: Catalogue et page univers (filtres, recherche, conseils)
 
 **Fichiers :**
 - Créer : `src/catalogue.php`, `src/conseils.php`, `public/univers.php`, `public/conseils.php`, `templates/pages/univers.twig`, `templates/pages/conseils.twig`, `templates/partials/{carte-produit,carte-conseil,modale-conseil}.twig`, `public/assets/css/pages.css`, `public/assets/js/{recherche,modale-conseil}.js`
@@ -389,7 +389,7 @@ test('normaliser', () => assert.equal(normaliser("  Pépinière—d'Été "), 'p
 
 ---
 
-### Tâche 6 : Pop-up produit
+### Task 6: Pop-up produit
 
 **Fichiers :**
 - Créer : `templates/partials/modale-produit.twig`, `public/assets/js/modale-produit.js`
@@ -428,7 +428,7 @@ public function test_carte_produit_echappe_le_json(): void {
 
 ---
 
-### Tâche 7 : Accueil
+### Task 7: Accueil
 
 **Fichiers :**
 - Modifier : `public/index.php`, `src/catalogue.php`
@@ -457,7 +457,7 @@ public function test_mis_en_avant_alterne_les_univers(): void {
 
 ---
 
-### Tâche 8 : Panier
+### Task 8: Panier
 
 **Fichiers :**
 - Créer : `src/panier.php`, `public/panier.php`, `public/panier-action.php`, `templates/pages/panier.twig`
@@ -508,7 +508,7 @@ public function test_detail_ramene_au_stock(): void {
 
 ---
 
-### Tâche 9 : Validation de commande
+### Task 9: Validation de commande
 
 **Fichiers :**
 - Créer : `src/commande.php`, `public/commande.php`, `public/commande-confirmee.php`, `templates/pages/{commande,commande-confirmee}.twig`
@@ -554,7 +554,7 @@ public function test_prix_pris_en_base(): void {
 
 ---
 
-### Tâche 10 : Admin — gabarit, gardes, mode démo, tableau de bord
+### Task 10: Admin — gabarit, gardes, mode démo, tableau de bord
 
 **Fichiers :**
 - Modifier : `src/auth.php`, `src/catalogue.php`
@@ -604,7 +604,7 @@ public function test_bandeau_demo(): void {
 
 ---
 
-### Tâche 11 : Admin — créer, modifier, supprimer un produit
+### Task 11: Admin — créer, modifier, supprimer un produit
 
 **Fichiers :**
 - Créer : `src/admin_produits.php`, `public/admin/produit.php`, `public/admin/produit-supprimer.php`, `templates/admin/produit-form.twig`, `public/assets/js/admin-produit.js`
@@ -663,7 +663,7 @@ public function test_photo_refuse_un_faux_jpg(): void {
 
 ---
 
-### Tâche 12 : Admin — nouvelle commande pour un client
+### Task 12: Admin — nouvelle commande pour un client
 
 **Fichiers :**
 - Créer : `public/admin/commande.php`, `templates/admin/{commande-form,commande-recap}.twig`
@@ -694,7 +694,7 @@ public function test_clients_pour_commande_exclut_demo(): void {
 
 ---
 
-### Tâche 13 : Finitions, README, vérification complète
+### Task 13: Finitions, README, vérification complète
 
 **Fichiers :**
 - Créer : `README.md`, `docs/captures/` (avant/après)
