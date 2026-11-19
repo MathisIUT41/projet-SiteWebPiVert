@@ -1,0 +1,9 @@
+# Ce dossier ne doit jamais être servi par le serveur web : seul public/ est la racine du site.
+# Protection en plus, au cas où tout le projet se retrouverait dans public_html.
+<IfModule mod_authz_core.c>
+    Require all denied
+</IfModule>
+<IfModule !mod_authz_core.c>
+    Order allow,deny
+    Deny from all
+</IfModule>
