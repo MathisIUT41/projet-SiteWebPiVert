@@ -4,6 +4,8 @@ Boutique en ligne de plantes et d'animaux, avec son espace d'administration (ges
 Ce dépôt est la **refonte complète du front et de l'admin** d'un projet étudiant : le site d'origine marchait,
 mais chaque page avait son propre style, plusieurs fonctions étaient inachevées et le code avait des failles de sécurité.
 
+**Voir le site en ligne : [pivert.thecipherbureau.fr](https://pivert.thecipherbureau.fr)** · [comptes de démonstration](#comptes-de-démonstration) (client, et admin en lecture seule)
+
 | Avant | Après |
 |---|---|
 | ![Accueil avant](docs/captures/avant-accueil.png) | ![Accueil après](docs/captures/apres-accueil.png) |
